@@ -7,7 +7,7 @@ render_part="butterfly_wingpart_hull";
 render_part="butterfly_wingpart_2d";
 render_part="butterfly_wingparts_2d";
 render_part="butterfly_traverse_wingpart";
-render_part="butterfly_traverse_wingparts";
+//render_part="butterfly_traverse_wingparts";
 
 function butterfly_wingpart_points() = [ [0,0],[3,0],[6,3],[6,4],[1,4],[0,3] ];
 function butterfly_wingpart_paths() = [[0,1,2,3,4,5,6]];
@@ -83,24 +83,42 @@ if(render_part=="butterfly_wingparts_2d") {
 }
 
 module butterfly_traverse_wingpart(grid_w=8.0,grid_h=8.0,dir=-1,mount_index=0,start_d=8.0,end_d=2.0,mount_hole_d=5.0,start_h=2.0,end_h=1.0) {
+  $fn=16;
   pts=len(butterfly_wingpart_grid());
   difference() {
     union() for(i=[0:pts-1]) assign(curpt_idx=(pts+mount_index+dir*i)%pts,nextpt_idx=(pts+mount_index+dir*(i+1))%pts) 
 	assign(curpt=butterfly_wingpart_grid()[curpt_idx],nextpt=butterfly_wingpart_grid()[nextpt_idx]) {
 	hull() {
-		translate([grid_w*curpt[0]-grid_w/2,grid_h*curpt[1]-grid_h/2]) cylinder( r1=(start_d-(start_d-end_d)*i/pts)/2,r2=(start_d-(start_d-end_d)*(i+1)/pts)/2,h=start_h-(start_h-end_h)*i/pts,center=false);
+		if(i==0) {
+			translate([grid_w*curpt[0]-grid_w/2,grid_h*curpt[1]-grid_h/2]) hull() {
+				cylinder( r=(start_d-(start_d-end_d)*i/pts)/2,h=start_h-(start_h-end_h)*i/pts,center=false);
+				//translate([start_d/4,start_d/4]) cylinder(r=start_d/4,h=start_h,center=false);
+				//translate([start_d/4,-start_d/4]) cylinder(r=start_d/4,h=start_h,center=false);
+				//translate([-start_d/4,-start_d/4]) cylinder(r=start_d/4,h=start_h,center=false);
+				//translate([-start_d/4,start_d/4]) cylinder(r=start_d/4,h=start_h,center=false);
+			}
+		} else {
+			translate([grid_w*curpt[0]-grid_w/2,grid_h*curpt[1]-grid_h/2]) cylinder( r1=(start_d-(start_d-end_d)*i/pts)/2,r2=(start_d-(start_d-end_d)*(i+1)/pts)/2,h=start_h-(start_h-end_h)*i/pts,center=false);
+		}
 		translate([grid_w*nextpt[0]-grid_w/2,grid_h*nextpt[1]-grid_h/2]) cylinder( r1=(start_d-(start_d-end_d)*(i+1)/pts)/2,r2=(start_d-(start_d-end_d)*(i+2)/pts)/2,h=start_h-(start_h-end_h)*(i+1)/pts,center=false);
 	}
     }
     translate([grid_w*butterfly_wingpart_grid()[mount_index][0]-grid_w/2,grid_h*butterfly_wingpart_grid()[mount_index][1]-grid_h/2]) cylinder(r=mount_hole_d/2,h=2*(start_h+end_h),center=true);
+    for(i=[0:pts-1]) assign(curpt_idx=(pts+mount_index+dir*i)%pts,nextpt_idx=(pts+mount_index+dir*(i+1))%pts) 
+	assign(curpt=butterfly_wingpart_grid()[curpt_idx],nextpt=butterfly_wingpart_grid()[nextpt_idx]) {
+	hull() {
+		translate([grid_w*curpt[0]-grid_w/2,grid_h*curpt[1]-grid_h/2]) cylinder( r1=(end_d-end_d*i/pts)/2,r2=(end_d-end_d*(i+1)/pts)/2,h=start_h-(start_h-end_h)*(i-1)/pts,center=false);
+		translate([grid_w*nextpt[0]-grid_w/2,grid_h*nextpt[1]-grid_h/2]) cylinder( r1=(end_d-end_d*(i+1)/pts)/2,r2=(end_d-end_d*(i+2)/pts)/2,h=start_h-(start_h-end_h)*i/pts,center=false);
+	}
+    }
   }
 }
 
 if(render_part=="butterfly_traverse_wingpart") {
-  butterfly_traverse_wingpart(dir=-1,mount_index=0);
+  butterfly_traverse_wingpart(dir=-1,mount_index=0,mount_hole_d=5.2,start_d=5.2+0.8*4,end_d=2.0,start_h=0.8,end_h=0.4);
 }
 
-module butterfly_traverse_wingparts(grid_w=8.0,grid_h=8.0,start_d=8.0,end_d=2.0,mount_hole_d=5.0,start_h=2.0,end_h=1.0) {
+module butterfly_traverse_wingparts(grid_w=8.0,grid_h=8.0,start_d=8.0,end_d=2.0,mount_hole_d=5.0,start_h=0.8,end_h=0.4) {
 	translate([grid_w/2,grid_h/2]) translate([-butterfly_wingmounts_grid()[0][0]*grid_w+grid_w,-butterfly_wingmounts_grid()[0][1]*grid_h+grid_h])
 		butterfly_traverse_wingpart(grid_w=grid_w,grid_h=grid_h,start_d=start_d,end_d=end_d,mount_hole_d=mount_hole_d,start_h=start_h,end_h=end_h,dir=-1,mount_index=butterfly_wingmounts_grid_indicies()[0]);
 	translate([grid_w/2,-grid_h/2]) rotate(90) translate([-butterfly_wingmounts_grid()[1][0]*grid_w,-butterfly_wingmounts_grid()[1][1]*grid_h])
@@ -114,6 +132,6 @@ module butterfly_traverse_wingparts(grid_w=8.0,grid_h=8.0,start_d=8.0,end_d=2.0,
 }
 
 if(render_part=="butterfly_traverse_wingparts") {
-  butterfly_traverse_wingparts();
+  butterfly_traverse_wingparts(mount_hole_d=5.2,start_d=5.2+0.8*3,end_d=2.0);
 }
 
