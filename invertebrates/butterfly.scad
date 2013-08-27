@@ -74,9 +74,11 @@ module butterfly_wingpart_lattice_2d(grid_w=8.0,grid_h=8.0,peg_d=5.0,wall_th=(8.
 	        translate([[grid_w,0],[0,grid_h]]*(ptnp1+(ptnp3-ptnp1)/4)-[grid_w/2,grid_h/2]) circle(r=wall_th/2);
 	    }
 	  }
-	  hull() {
+	  if(radials==true) {
+		hull() {
 	       translate([ptnp1[0]*grid_w-grid_w/2,ptnp1[1]*grid_h-grid_h/2]) circle(r=grid_w/2-wall_th);
 	       translate([[grid_w,0],[0,grid_h]]*(ptn+(ptnp2-ptn)/4)-[grid_w/2,grid_h/2]) circle(r=wall_th);
+		}
 	  }
     }
   }
