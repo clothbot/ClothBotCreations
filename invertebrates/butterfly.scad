@@ -142,7 +142,7 @@ module butterfly_wingparts_3d(grid_w=8.0,grid_h=8.0,peg_d=5.0,wall_th=(8.0-5.0)/
 }
 
 if(render_part=="butterfly_wingparts_3d") {
-  butterfly_wingparts_3d(lattice=true);
+  butterfly_wingparts_3d(lattice=false);
 }
 
 
