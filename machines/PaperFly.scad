@@ -25,13 +25,13 @@ $fn=60; // Smoothness setting
 nozzle_offset=32.0/2;
 
 wing_front_thickness = 0.8;
-wing_back_thickness=0.2;
+wing_back_thickness=0.4;
 wing_span=200;
 wing_body_length=50;
 wing_rib_angle=atan2(wing_span/2,wing_body_length)/2;
-rib_wall_th=1.2;
+rib_wall_th=0.8;
 wing_bone_r=2*wing_front_thickness;
-wing_wall_th=2.0;
+wing_wall_th=1.6;
 
 tail_span=80;
 tail_body_length=40;
@@ -52,7 +52,7 @@ fuselage_nose_th=2.0;
 fuselage_tail_w=8.0;
 fuselage_tail_th=1.0;
 
-connector_body_th=2.0;
+connector_body_th=2.4;
 connector_peg_h=1.2;
 connector_peg_d=4.9;
 connector_peg_hole_d=1.9;
@@ -278,6 +278,7 @@ module Fuselage_Tail_Clip(fuselage_length=fuselage_length
 	  }
 	}
 	translate([tail_body_length,0,0]) cylinder(r=socket_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
+	translate([tail_body_length,0,fuselage_nose_th/2]) cylinder(r2=socket_hole_d/2+fuselage_nose_th/2,r1=socket_hole_d/2,h=fuselage_nose_th/2,center=true);
 	hull() {
 	  translate([tail_body_length,0,0]) cylinder(r=peg_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
 	  translate([fuselage_tail_w/2,0,0]) cylinder(r=peg_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
