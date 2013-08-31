@@ -27,14 +27,14 @@ nozzle_offset=32.0/2;
 
 wing_front_thickness = 0.8;
 wing_back_thickness=0.4;
-wing_span=200;
+wing_span=240;
 wing_body_length=30;
 wing_rib_angle=atan2(wing_span/2,wing_body_length)/2;
 rib_wall_th=1.2;
 wing_bone_r=2*wing_front_thickness;
 wing_wall_th=1.6;
 
-tail_span=80;
+tail_span=90;
 tail_body_length=25;
 tail_width=4.0;
 vtail_angle=45;
@@ -47,7 +47,7 @@ tail_back_thickness=0.2;
 nose_distance=42;
 nose_size=8;
 
-fuselage_length=80;
+fuselage_length=110;
 fuselage_nose_w=4.0;
 fuselage_nose_th=2.0;
 fuselage_tail_w=10.0;
@@ -55,7 +55,7 @@ fuselage_tail_th=1.0;
 
 connector_body_th=2.4;
 connector_peg_h=1.8+wing_front_thickness;
-connector_peg_d=4.9;
+connector_peg_d=4.8;
 connector_peg_hole_d=1.9;
 connector_socket_hole_d=5.5;
 connector_socket_hole_h=2.0;
@@ -73,6 +73,7 @@ render_part="PaperFly";
 render_part="PaperFly_Parts_wings";
 render_part="PaperFly_Parts_body";
 render_part="PaperFly_Parts";
+//render_part="PaperFly_Parts_wings45";
 
 module Wing_2D(wing_span=wing_span
     , wing_body_length=wing_body_length
@@ -99,6 +100,7 @@ module Wing_3D(wing_span=wing_span
 	, wing_wall_th=wing_wall_th
 	, rib_wall_th=rib_wall_th
 	, tip_angle=wing_rib_angle
+	, fill_th=0.0
 	) {
 	intersection() {
 		render() hull() {
@@ -130,6 +132,7 @@ module Wing_3D(wing_span=wing_span
 			}
 		}
 	}
+	if(fill_th>0) linear_extrude(height=fill_th) Wing_2D(wing_span=wing_span,wing_body_length=wing_body_length,side=side);
 }
 
 if(render_part=="Wing_3D") {
@@ -166,6 +169,7 @@ module Tail_3D(tail_span=tail_span
 	, vtail_angle=vtail_angle
 	, fuselage_tail_th=fuselage_tail_th
 	, extend=0.1
+	, fill_th=0.0
 	) {
 	intersection() {
 		if(side>0) {
@@ -207,6 +211,7 @@ module Tail_3D(tail_span=tail_span
 			}
 		}
 	}
+	if(fill_th>0) linear_extrude(height=fill_th) Tail_2D(tail_span=tail_span,tail_body_length=tail_body_length,side=side);
 	translate([-tail_body_length/8,0,0]) hull() {
 		translate([-3*tail_body_length/4+tail_wall_th,-side*tail_wall_th,0]) cylinder(r=tail_wall_th,h=tail_front_thickness,center=false);
 		translate([-tail_wall_th,-side*tail_wall_th,0]) cylinder(r=tail_wall_th,h=tail_front_thickness,center=false);
@@ -287,7 +292,7 @@ module Fuselage_Tail_Clip(fuselage_length=fuselage_length
 	translate([tail_body_length+peg_d/2,0,fuselage_nose_th/2]) cylinder(r2=socket_hole_d/2+fuselage_nose_th/2,r1=socket_hole_d/2,h=fuselage_nose_th/2,center=true);
 	hull() {
 	  translate([tail_body_length+peg_d/2,0,0]) cylinder(r=peg_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
-	  translate([fuselage_tail_w/2,0,0]) cylinder(r=peg_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
+	  translate([fuselage_tail_w/2,0,0]) cylinder(r=socket_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
 	}
   }
 }
@@ -316,7 +321,11 @@ module Fuselage_Tail(fuselage_length=fuselage_length
 		}
 	  }
 	  translate([tail_body_length+peg_d/2,0,0]) cylinder(r=peg_d/2,h=fuselage_nose_th+peg_h,center=false);
-	  translate([tail_body_length+peg_d/2,0,fuselage_tail_th]) cylinder(r1=peg_d/2+(fuselage_nose_th-fuselage_tail_th),r2=peg_d/2,h=fuselage_nose_th-fuselage_tail_th,center=false);
+	  translate([fuselage_tail_w/2,0,0]) cylinder(r=peg_d/2,h=fuselage_nose_th+peg_h,center=false);
+	  hull() {
+	    translate([tail_body_length+peg_d/2,0,fuselage_tail_th]) cylinder(r1=peg_d/2+(fuselage_nose_th-fuselage_tail_th),r2=peg_d/2,h=fuselage_nose_th-fuselage_tail_th,center=false);
+	    translate([fuselage_tail_w/2,0,fuselage_tail_th]) cylinder(r1=peg_d/2+(fuselage_nose_th-fuselage_tail_th),r2=peg_d/2,h=fuselage_nose_th-fuselage_tail_th,center=false);
+	  }
 	  hull() {
 		translate([tail_body_length,0,0]) {
 			cylinder(r1=fuselage_tail_w/2-fuselage_tail_th/4,r2=fuselage_tail_w/2,h=fuselage_tail_th/4,center=false);
@@ -332,13 +341,16 @@ module Fuselage_Tail(fuselage_length=fuselage_length
 	translate([tail_body_length+peg_d/2,0,0]) cylinder(r=socket_hole_d/2,h=fuselage_tail_th,center=true);
 	translate([tail_body_length+peg_d/2,0,fuselage_tail_th/2]) cylinder(r1=socket_hole_d/2,r2=0,h=socket_hole_d/2,center=false);
 
+	translate([fuselage_tail_w/2,0,0]) cylinder(r=peg_hole_d/2,h=4*(fuselage_tail_th+fuselage_nose_th),center=true);
+	translate([fuselage_tail_w/2,0,0]) cylinder(r=socket_hole_d/2,h=fuselage_tail_th,center=true);
+	translate([fuselage_tail_w/2,0,fuselage_tail_th/2]) cylinder(r1=socket_hole_d/2,r2=0,h=socket_hole_d/2,center=false);
 
-	translate([tail_body_length/2+2*tail_front_thickness,fuselage_tail_w/5,0]) rotate([-90+vtail_angle,0,0]) {
+	translate([tail_body_length/2+5*tail_front_thickness,fuselage_tail_w/5,0]) rotate([-90+vtail_angle,0,0]) {
 		cube([3*tail_body_length/4+2*tail_front_thickness,2*tail_front_thickness,tail_body_length],center=true);
 		// translate([tail_body_length/8,0,0]) cube([3*tail_body_length/4,2*tail_front_thickness,3*tail_front_thickness],center=false);
 	}
 	//translate([0,fuselage_tail_w/2,0]) cube([2*(tail_body_length-2*tail_front_thickness),fuselage_tail_w/2,tail_body_length],center=true);
-	translate([tail_body_length/2+2*tail_front_thickness,-fuselage_tail_w/5,0]) rotate([90-vtail_angle,0,0]) {
+	translate([tail_body_length/2+5*tail_front_thickness,-fuselage_tail_w/5,0]) rotate([90-vtail_angle,0,0]) {
 		cube([3*tail_body_length/4+2*tail_front_thickness,2*tail_front_thickness,tail_body_length],center=true);
 		//translate([tail_body_length/8,0,0]) mirror([0,1,0]) cube([3*tail_body_length/4,2*tail_front_thickness,3*tail_front_thickness],center=false);
 	}
@@ -432,6 +444,7 @@ module PaperFly_Parts(fuselage_length=fuselage_length
     ,peg_d=connector_peg_d,peg_h=connector_peg_h,peg_hole_d=connector_peg_hole_d
     , socket_hole_d=connector_socket_hole_d, socket_hole_h=connector_socket_hole_h
 	, parts="wings",body_count=2
+	, fill_th=0.0
 	) {
   if(parts=="body") translate([0,-fuselage_length/2,0]) for(i=[0:body_count-1]) translate([2*nozzle_separation*i-nozzle_separation,0,0]) {
 	translate([nozzle_separation-0.75*nozzle_separation,0,0]) {
@@ -443,32 +456,39 @@ module PaperFly_Parts(fuselage_length=fuselage_length
 	     translate([fuselage_length,0,0]) Fuselage_Connector_Holes();
 	  }
 	  translate([1.5*fuselage_tail_w+1.0,3*fuselage_length/4-peg_d,0]) rotate([0,0,90]) Fuselage_Tail_Clip();
-	  translate([1.5*fuselage_tail_w+1.0,fuselage_length/2,0]) rotate([0,0,90]) difference() {
+	  translate([1.5*fuselage_tail_w+1.0,fuselage_length/2+8,0]) rotate([0,0,90]) difference() {
 		Fuselage_Connector_Connector(body_th=wing_front_thickness,peg_h=0);
 		Fuselage_Connector_Holes(body_th=wing_front_thickness,peg_h=0);
+	  }
+	  translate([1.5*fuselage_tail_w+1.0,fuselage_length/2-24,0]) rotate([0,0,90]) difference() {
+		hull() {
+			Fuselage_Connector_Connector(body_th=2.4,peg_h=1.8);
+			translate([-20,-8,0]) cube([8,16,6.4],center=false);
+		}
+		Fuselage_Connector_Holes(body_th=3.2,peg_h=3.2,socket_hole_h=3.2,peg_hole_d=1.9);
 	  }
 	}
   }
   if(parts=="wings") translate([0,-wing_span/4,0]) {
-	translate([nozzle_separation*3+1.0,0,0]) difference() {
+	translate([nozzle_separation*(3+(wing_body_length-wing_body_length%nozzle_separation)/nozzle_separation),0,0]) difference() {
 	  union() {
-         Wing_3D(wing_body_length=wing_body_length);
+         Wing_3D(wing_body_length=wing_body_length,fill_th=fill_th);
          translate([-4,0,0]) Fuselage_Connector_Connector(yn=1,xn=3,body_th=wing_front_thickness,peg_h=0);
        }
        translate([-4,0,0]) Fuselage_Connector_Holes(yn=1,xn=3,body_th=wing_front_thickness,peg_h=0);
      }
 
-	translate([nozzle_separation*0-1.0,0,0]) rotate([0,0,180]) difference() {
+	translate([nozzle_separation*0,0,0]) rotate([0,0,180]) difference() {
         union() {
-          Wing_3D(side=-1,wing_body_length=wing_body_length);
+          Wing_3D(side=-1,wing_body_length=wing_body_length,fill_th=fill_th);
           translate([-4,0,0]) Fuselage_Connector_Connector(yn=1,xn=3,body_th=wing_front_thickness,peg_h=0);
         }
         translate([-4,0,0]) Fuselage_Connector_Holes(yn=1,xn=3,body_th=wing_front_thickness,peg_h=0);
      }
 	translate([-2*nozzle_separation+2.0,tail_span/2+(wing_span-tail_span)/16,0]) {
-		translate([tail_body_length,(wing_span-tail_span)/8,0]) Tail_3D();
+		translate([tail_body_length,(wing_span-tail_span)/8,0]) Tail_3D(fill_th=fill_th);
 		// translate([-2,0,0]) Fuselage_Tail_Clip();
-		translate([tail_body_length,-fuselage_tail_w,0]) Tail_3D(side=-1);
+		translate([tail_body_length,-fuselage_tail_w,0]) Tail_3D(side=-1,fill_th=fill_th);
 	}
   }
 	for(i=[-1:2]) translate([2*i*nozzle_separation,0,-wing_front_thickness]) {
@@ -485,6 +505,9 @@ if(render_part=="PaperFly_Parts_body") {
 }
 
 if(render_part=="PaperFly_Parts") {
+    PaperFly_Parts(parts="wings",wing_body_length=55,fill_th=0.2);
+    PaperFly_Parts(parts="body",wing_body_length=55,body_count=1);
+}
+if(render_part=="PaperFly_Parts_wings45") {
     PaperFly_Parts(parts="wings",wing_body_length=45);
-    PaperFly_Parts(parts="body",wing_body_length=45,body_count=1);
 }
