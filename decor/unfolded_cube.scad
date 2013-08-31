@@ -1,5 +1,8 @@
 // Simple Unfolded Cube
 
+nozzle_separation=32.0;
+nozzle_offset=nozzle_separation/2;
+
 use <OpenHardwareLogo.scad>
 use <RepRapLogo.scad>
 
@@ -9,6 +12,8 @@ render_part="unfolded_oshw_cube_w_led"; // unfolded_oshw_cube_w_led()
 render_part="unfolded_oshw_reprap_cube_w_led"; // unfolded_oshw_reprap_cube_w_led()
 render_part="unfolded_oshw_reprap_cube_w_led_4x"; // unfolded_oshw_reprap_cube_w_led() x 4
 render_part="unfolded_oshw_reprap_cube_w_led_large"; // unfolded_oshw_reprap_cube_w_led()
+render_part="unfolded_oshw_reprap_cube_w_led_large_filled"; // unfolded_oshw_reprap_cube_w_led(type="filled")
+render_part="unfolded_oshw_reprap_cube_w_led_filled"; // unfolded_oshw_reprap_cube_w_led()
 
 
 module frame_2d(size,th) {
@@ -93,7 +98,7 @@ module led_holder(size,spacing,inner_h,wall_h,wall_th,led_d) {
 	  cylinder(r=led_d/2+wall_th,h=2*inner_h,center=true);
 	  cylinder(r=led_d/2,h=2*inner_h+wall_h,center=true);
 	}
-	for(i=[0:3]) rotate([0,0,360*i/4+45]) translate([led_d/2+wall_th/2,-wall_th/2,wall_h/2]) cube([size,wall_th,wall_h],center=false);
+	for(i=[0:3]) rotate([0,0,360*i/4+45]) translate([led_d/2+wall_th/2,-wall_th/2,0]) cube([size,wall_th,2*wall_h],center=false);
     }
   }
 }
@@ -128,7 +133,7 @@ if(render_part=="unfolded_oshw_cube_w_led") {
 }
 
 module unfolded_tab(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0) {
-  tab_w=size-spacing-8*wall_th;
+  tab_w=size-spacing-6*wall_th;
   tab_h=2*wall_h+1.2*wall_th;
   translate([0,(size-spacing)/2,wall_h/2]) difference() {
     translate([0,tab_h/2,0]) cube([tab_w,tab_h,wall_h],center=true);
@@ -146,9 +151,10 @@ module unfolded_slot(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0) {
 } 
 
 
-module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hinges=true,add_tabs=true) {
+module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hinges=true,add_tabs=true,fill=[false,false,false,false,false,false],fill_th=0.2) {
   // Top face is center  face 0    
   linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+  if(fill[0]) translate([0,0,fill_th/2]) cube([size-spacing,size-spacing,fill_th],center=true);
   if(add_hinges) double_hinge(size,spacing,wall_h,wall_th);
   if(add_hinges) rotate(-90) double_hinge(size,spacing,wall_h,wall_th);
   if(add_tabs) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
@@ -158,6 +164,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // face 1
   translate([size+spacing,0,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(fill[1]) translate([0,0,fill_th/2]) cube([size-spacing,size-spacing,fill_th],center=true);
     if(add_tabs) rotate(-90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(180) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_hinges) rotate(90) double_hinge(size,spacing,wall_h,wall_th);
@@ -167,6 +174,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // face 2
   translate([size+spacing,size+spacing,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(fill[2]) translate([0,0,fill_th/2]) cube([size-spacing,size-spacing,fill_th],center=true);
     if(add_tabs) rotate(-90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
@@ -176,6 +184,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // face 3
   translate([-size-spacing,-size-spacing,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(fill[3]) translate([0,0,fill_th/2]) cube([size-spacing,size-spacing,fill_th],center=true);
     if(add_tabs) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(90) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_hinges) double_hinge(size,spacing,wall_h,wall_th);
@@ -185,6 +194,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // face 4
   translate([0,-size-spacing,0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(fill[4]) translate([0,0,fill_th/2]) cube([size-spacing,size-spacing,fill_th],center=true);
     if(add_tabs) rotate(-90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(180) unfolded_slot(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if($children==1) child(0);
@@ -193,6 +203,7 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
   // Bottom face 5
   translate([-size-spacing,-2*(size+spacing),0]) {
     linear_extrude(height=wall_h) frame_2d(size-spacing,wall_th);
+    if(fill[5]) translate([0,0,fill_th/2]) cube([size-spacing,size-spacing,fill_th],center=true);
     if(add_tabs) rotate(90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(-90) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
     if(add_tabs) rotate(180) unfolded_tab(size=size,spacing=spacing,wall_th=wall_th,wall_h=wall_h);
@@ -203,9 +214,9 @@ module unfolded_cube_map_s(size=15.0,spacing=1.0,wall_th=2.0,wall_h=1.0,add_hing
 }
 
 
-module unfolded_oshw_reprap_cube_w_led(size=30.0, spacing=2.0, inner_h=5.0, wall_h=0.5,wall_th=2.0, led_d=5.2) {
+module unfolded_oshw_reprap_cube_w_led(size=30.0, spacing=2.0, inner_h=5.0, wall_h=0.5,wall_th=2.0, led_d=5.2, fill=[false,false,false,false,false,false],fill_th=0.2) {
   $fn=16;
-  unfolded_cube_map_s(size=size,wall_th=wall_th,wall_h=wall_h,spacing=spacing) {
+  unfolded_cube_map_s(size=size,wall_th=wall_th,wall_h=wall_h,spacing=spacing,fill=fill,fill_th=fill_th) {
     led_holder(size,spacing,inner_h,wall_h,wall_th,led_d); // Top face object
     render() intersection() {
       hull() {
@@ -257,7 +268,22 @@ if(render_part=="unfolded_oshw_reprap_cube_w_led_4x") {
 uorcwl_size_large=40.0;
 if(render_part=="unfolded_oshw_reprap_cube_w_led_large") {
   echo("Rendering large unfolded_oshw_reprap_cube_w_led()...");
-  rotate(90+45) 
+  translate([nozzle_offset,0,0]) rotate(90+45) 
    translate([0,(uorcwl_size_large+uorcwl_spacing)/2,0])
 	unfolded_oshw_reprap_cube_w_led(size=uorcwl_size_large,spacing=uorcwl_spacing,wall_h=0.75,wall_th=0.8,led_d=5.6,inner_h=1.5);
 }
+
+if(render_part=="unfolded_oshw_reprap_cube_w_led_large_filled") {
+  echo("Rendering large filled unfolded_oshw_reprap_cube_w_led()...");
+  translate([nozzle_offset,0,0]) rotate(90+45) 
+   translate([0,(uorcwl_size_large+uorcwl_spacing)/2,0])
+	unfolded_oshw_reprap_cube_w_led(size=uorcwl_size_large,spacing=uorcwl_spacing,wall_h=0.8,wall_th=1.2,led_d=5.6,inner_h=1.5,fill=[false,true,true,true,true,false],fill_th=0.2);
+}
+
+if(render_part=="unfolded_oshw_reprap_cube_w_led_filled") {
+  echo("Rendering  filled unfolded_oshw_reprap_cube_w_led()...");
+  for(i=[0:1]) translate([2*nozzle_separation*i-nozzle_separation,0,0]) translate([1*nozzle_offset,0,0]) rotate(45) 
+   translate([0,(uorcwl_size+uorcwl_spacing)/2,0])
+	unfolded_oshw_reprap_cube_w_led(size=nozzle_separation/2,spacing=1.0,wall_h=0.6,wall_th=0.8,led_d=5.4,inner_h=1.0,fill=[false,true,true,true,true,false],fill_th=0.2);
+}
+
