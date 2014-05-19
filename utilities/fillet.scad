@@ -23,23 +23,24 @@ module fillet_two(r=1.0,steps=3) {
 	hull() {
 	  render() intersection() {
 		children(0);
-		minkowski() {
-			children(2);
-			sphere(r=r*step/steps);
-		}
+		offset_3d(r=r*step/steps) children(2);
 	  }
 	  render() intersection() {
 		children(1);
-		minkowski() {
-			children(2);
-			sphere(r=r*(steps-step+1)/steps);
-		}
+		offset_3d(r=r*(steps-step+1)/steps) children(2);
 	  }
 	}
   }
 }
 
-fillet(r=1,steps=5) {
+module offset_3d(r=1.0) {
+  for(k=[0:$children-1]) minkowski() {
+	children(k);
+	sphere(r=r,$fn=8);
+  }
+}
+
+fillet(r=2,steps=5) {
 	cylinder(r=5,h=10);
 	cube([10,10,2]);
 	rotate([30,30,30]) cylinder(r=1.0,h=50,center=true);
