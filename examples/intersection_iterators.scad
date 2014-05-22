@@ -1,4 +1,4 @@
-render_part=2s;
+render_part=2;
 
 module pin_array(nx=4,ny=3,dx=5,dy=5) {
   for(ix=[0:nx-1]) for(jy=[0:ny-1]) {
