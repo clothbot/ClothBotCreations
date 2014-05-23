@@ -3,10 +3,10 @@
 //	offset_3d();
 //   explode();
 
-module radial_pairs_filter(dr=1.0) {
+module radial_pairs_filter(dr=1.0,solid=false) {
   if($children>1) for(i=[0:$children-2]) for(j=[i:$children-1]) {
 	echo(str(" radial_pairs_filter: child ",i," vs child ",j));
-	union() filter() {
+	union() filter(solid=solid) {
 		children(i);
 		children(j);
 		intersection() {
@@ -24,13 +24,17 @@ module explode() {
 	children();
 }
 
-module filter() {
+module filter(solid=false) {
   if($children>2) {
 	union() {
 	  children(0);
 	  children(1);
 	}
-	%hull() {children(0);children(2);}
+	if(solid) {
+		hull() {children(0);children(2);}
+	} else {
+		%hull() {children(0);children(2);}
+	}
   } else {
 	echo("  Empty intersection; don't pair; return nothing.");
   }
@@ -65,7 +69,7 @@ module hull_pairs() {
 //hull_pairs() radial_pairs_filter(dr=8+16*$t) explode() shapes();
 //%shapes();
 
-radial_pairs_filter(dr=8+16*$t) {
+radial_pairs_filter(dr=8+16*$t,solid=true) {
 	translate([-10,-10,0]) cylinder(r=1,h=2,center=true);
 	translate([0,-10,0]) cylinder(r=1,h=2,center=true);
 	translate([10,-10,0]) cylinder(r=1,h=2,center=true);
