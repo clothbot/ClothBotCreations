@@ -1,8 +1,9 @@
 // Cellular Automata
 test_module="test ca_2x2_match";
 test_module="test ca_2x2_map";
-test_module="test ca_2x2_grid_match";
-test_module="test ca_2x2_grid_4x4_match";
+test_module="test ca_2x2_grid_match_simple";
+test_module="test ca_2x2_grid_match_2x2";
+//test_module="test ca_2x2_grid_4x4_match";
 
 test_pattern=[[1,0],[1,1]];
 test_match=[[1,0],[1,1]];
@@ -111,8 +112,8 @@ module test_2x2_grid_rotate_pattern(pattern=[[1,0],[1,1]],delta=0.0) {
     }
 }
 
-module ca_2x2_grid_match(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
-    echo(str("ca_2x2_grid_match: $children = ",$children));
+module ca_2x2_grid_match_simple(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
+    echo(str("ca_2x2_grid_match_simple: $children = ",$children));
     for(gxi=[0:grid_size[0]],gyj=[0:grid_size[1]]) translate([2*gxi,2*gyj]) {
         //ca_2x2_match(pattern=pattern) translate([-2*gxi,-2*gyj]) children();
         difference() {
@@ -122,7 +123,48 @@ module ca_2x2_grid_match(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
     }
 }
 
-if(test_module=="test ca_2x2_grid_match") {
+if(test_module=="test ca_2x2_grid_match_simple") {
+    ca_2x2_grid_match_simple(pattern=test_match,grid_size=[2,2])
+        test_2x2_grid_rotate_pattern(pattern=test_pattern,delta=-0.4);
+    %translate([0,0,3]) test_2x2_grid_rotate_pattern(pattern=test_pattern,delta=-0.4);
+    %translate([0,0,1.5]) pattern_2x2(pattern=test_match);
+}
+
+module ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=[10,10],cell_size=[1,1]) {
+    echo(str("ca_gen_grid_mask: $children = ",$children));
+    for(gxi=[0:grid_size[0]],gyj=[0:grid_size[1]]) translate([2*gxi,2*gyj]) {
+        for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==1) {
+            translate([xi,yj]) square(cell_size,center=false);
+        }
+    }
+}
+
+module ca_2x2_grid_match(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
+    difference() {
+        intersection_for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==1) {
+            echo(str("ca_2x2_match: intersection_for match at xi=",xi,", yj=",yj));
+                intersection() {
+                    offset(delta=2.0) intersection() {
+                        union() children();
+                        translate([xi,yj]) ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=grid_size);
+                    }
+                    ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=grid_size,cell_size=[1,1]);
+                }
+        }
+        for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==0) {
+            echo(str("ca_2x2_match: difference match at xi=",xi,", yj=",yj));
+            intersection() {
+                offset(delta=2.0) intersection()  {
+                    union() children();
+                    translate([xi,yj]) ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=grid_size);
+                }
+                ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=grid_size,cell_size=[1,1]);
+            }
+        }
+    }
+}
+
+if(test_module=="test ca_2x2_grid_match_2x2") {
     ca_2x2_grid_match(pattern=test_match,grid_size=[2,2])
         test_2x2_grid_rotate_pattern(pattern=test_pattern,delta=-0.4);
     %translate([0,0,3]) test_2x2_grid_rotate_pattern(pattern=test_pattern,delta=-0.4);
@@ -135,6 +177,7 @@ if(test_module=="test ca_2x2_grid_4x4_match") {
             test_2x2_grid_4x4(delta=-0.4);
         test_2x2_grid_4x4(delta=-0.2);
     }
+    %translate([0,0,-1]) ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=[4,4]);
     //%translate([0,0,3]) test_2x2_grid_4x4(delta=-0.4);
     //%translate([0,0,1.5]) pattern_2x2(pattern=test_match);
     test_2x2_grid_4x4(delta=-0.3);
