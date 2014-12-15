@@ -4,11 +4,20 @@ test_module="test ca_2x2_map";
 test_module="test ca_2x2_grid_match_simple";
 test_module="test ca_2x2_grid_match_2x2";
 test_module="test ca_2x2_grid_4x4_match";
-test_module="test ca_2x2_grid_4x4_map";
+test_module="test ca_2x2_grid_4x4_map";
+test_module="test union ca_2x2_grid_4x4_map";
 
 test_pattern=[[1,0],[1,1]];
 test_match=[[1,0],[1,1]];
 test_map=[[0,1],[1,0]];
+
+test_match_any_list=[
+	 [[1,0],[1,1]]
+        ,[[0,1],[1,1]]
+        ,[[1,1],[0,1]]
+        ,[[1,1],[1,0]]
+        ];
+        
 
 module ca_2x2_match(pattern=[[1,0],[1,1]]) {
     scale([2,2]) difference() {
@@ -189,20 +198,43 @@ if(test_module=="test ca_2x2_grid_4x4_match") {
         }
         pattern_2x2(pattern=test_match,delta=-0.2);
     }
-}
-
-module ca_2x2_grid_map(from=[[1,0],[1,1]],to=[[0,1],[1,0]],delta=0.0,grid_size=[10,10]) {
-    echo(str("ca_2x2_grid_map: len(from)=",len(from)));
-    intersection() {
-        ca_2x2_grid_match(pattern=from) children();
-        ca_gen_grid_mask(pattern=to,grid_size=grid_size,cell_size=[1,1]);
-    }
-}
-
-if(test_module=="test ca_2x2_grid_4x4_map") {
+}
+
+module ca_2x2_grid_map(from=[[1,0],[1,1]],to=[[0,1],[1,0]],delta=0.0,grid_size=[10,10]) {
+    echo(str("ca_2x2_grid_map: len(from)=",len(from)));
+    intersection() {
+        ca_2x2_grid_match(pattern=from) children();
+        ca_gen_grid_mask(pattern=to,grid_size=grid_size,cell_size=[1,1]);
+    }
+}
+
+if(test_module=="test ca_2x2_grid_4x4_map") {
     difference() {
-        ca_2x2_grid_map(from=test_match,to=test_map,grid_size=[4,4])
+        ca_2x2_grid_map(from=test_match,to=test_map,grid_size=[4,4]) {
             test_2x2_grid_4x4(delta=-0.4);
+        }
+        test_2x2_grid_4x4(delta=-0.2);
+    }
+    %translate([0,0,1.5]) ca_gen_grid_mask(pattern=test_match,grid_size=[4,4]);
+    %translate([0,0,-1.0]) ca_gen_grid_mask(pattern=test_map,grid_size=[4,4]);
+    //%translate([0,0,3]) test_2x2_grid_4x4(delta=-0.4);
+    //%translate([0,0,1.5]) pattern_2x2(pattern=test_match);
+    test_2x2_grid_4x4(delta=-0.3);
+    translate([-2,-2]) {
+        difference() {
+            pattern_2x2(pattern=[[1,1],[1,1]],delta=-0.05);
+            pattern_2x2(pattern=[[1,1],[1,1]],delta=-0.1);
+        }
+        pattern_2x2(pattern=test_match,delta=-0.2);
+    }
+}
+
+if(test_module=="test union ca_2x2_grid_4x4_map") {
+    difference() {
+        union() for(this_match=test_match_any_list) {
+            ca_2x2_grid_map(from=this_match,to=test_map,grid_size=[4,4])
+                test_2x2_grid_4x4(delta=-0.4);
+        }
         test_2x2_grid_4x4(delta=-0.2);
     }
     %translate([0,0,1.5]) ca_gen_grid_mask(pattern=test_match,grid_size=[4,4]);
@@ -217,4 +249,4 @@ if(test_module=="test ca_2x2_grid_4x4_map") {
         }
         pattern_2x2(pattern=test_match,delta=-0.2);
     }
-}
+}
