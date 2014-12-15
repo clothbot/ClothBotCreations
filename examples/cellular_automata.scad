@@ -3,7 +3,7 @@ test_module="test ca_2x2_match";
 test_module="test ca_2x2_map";
 test_module="test ca_2x2_grid_match_simple";
 test_module="test ca_2x2_grid_match_2x2";
-//test_module="test ca_2x2_grid_4x4_match";
+test_module="test ca_2x2_grid_4x4_match";
 
 test_pattern=[[1,0],[1,1]];
 test_match=[[1,0],[1,1]];
@@ -143,8 +143,8 @@ module ca_2x2_grid_match(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
     difference() {
         intersection_for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==1) {
             echo(str("ca_2x2_match: intersection_for match at xi=",xi,", yj=",yj));
-                intersection() {
-                    offset(delta=2.0) intersection() {
+                translate([0.5,0.5]) offset(delta=0.5) intersection() {
+                    translate([-xi,-yj]) offset(delta=1.0) intersection() {
                         union() children();
                         translate([xi,yj]) ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=grid_size);
                     }
@@ -153,8 +153,8 @@ module ca_2x2_grid_match(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
         }
         for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==0) {
             echo(str("ca_2x2_match: difference match at xi=",xi,", yj=",yj));
-            intersection() {
-                offset(delta=2.0) intersection()  {
+            translate([0.5,0.5]) offset(delta=0.5) intersection() {
+                translate([-xi,-yj]) offset(delta=1.0) intersection()  {
                     union() children();
                     translate([xi,yj]) ca_gen_grid_mask(pattern=[[1,0],[0,0]],grid_size=grid_size);
                 }
