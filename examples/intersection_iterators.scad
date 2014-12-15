@@ -57,7 +57,7 @@ module join_radius(dr=5.0,show=false) {
 
 
 module mask() {
-  render() difference() {
+  difference() {
     scale([12,12,5]) sphere(r=1,center=true,$fn=32);
     scale([11.5,11.5,4]) sphere(r=1,center=true,$fn=32);
     translate([0,0,-10]) cube([30,30,20],center=true);
@@ -67,7 +67,7 @@ module mask() {
 if(render_part==1) {
   echo("Add render(union=false) option to explode sub-volumes into children()");
   %mask();
-  join_array(dr=6) {
+  join_array(dr=5) {
     render(union=false) intersection() {
       pin_array(nx=5,ny=5) {
         cylinder(r=0.5,h=10,center=true);
@@ -120,7 +120,7 @@ if(render_part==2) {
 
 if(render_part==3) {
   echo("Example of join_array() performed on multiple explicit children.");
-  join_array(dr=9) {
+  join_array(dr=8) {
 	translate([-10,-10,0]) cylinder(r=1,h=2,center=true);
 	translate([0,-10,0]) cylinder(r=1,h=2,center=true);
 	translate([10,-10,0]) cylinder(r=1,h=2,center=true);

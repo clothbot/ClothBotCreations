@@ -12,7 +12,7 @@ module ca_2x2_match(pattern=[[1,0],[1,1]]) {
     scale([2,2]) difference() {
         intersection_for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==1) {
             echo(str("ca_2x2_match: intersection_for match at xi=",xi,", yj=",yj));
-                hull() intersection() {
+                intersection() {
                     translate([-xi,-yj]) offset(delta=1.0) intersection() {
                         union() children();
                         translate([xi,yj]) square([1,1],center=false);
@@ -22,7 +22,37 @@ module ca_2x2_match(pattern=[[1,0],[1,1]]) {
         }
         for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==0) {
             echo(str("ca_2x2_match: difference match at xi=",xi,", yj=",yj));
-            hull() intersection() {
+            intersection() {
+                translate([-xi,-yj]) offset(delta=1.0) intersection()  {
+                    union() children();
+                    translate([xi,yj]) square([1,1],center=false);
+                }
+                square([1,1],center=false);
+            }
+        }
+    }
+}
+
+module ca_2x2_match_pos(pattern=[[1,0],[1,1]]) {
+    scale([2,2]) {
+        intersection_for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==1) {
+            //echo(str("ca_2x2_match_pos: intersection_for match at xi=",xi,", yj=",yj));
+                intersection() {
+                    translate([-xi,-yj]) offset(delta=1.0) intersection() {
+                        union() children();
+                        translate([xi,yj]) square([1,1],center=false);
+                    }
+                    square([1,1],center=false);
+                }
+        }
+    }
+}
+
+module ca_2x2_match_neg(pattern=[[1,0],[1,1]]) {
+    scale([2,2]) {
+        for(xi=[0:1],yj=[0:1]) if(round(pattern[xi][yj])==0) {
+            //echo(str("ca_2x2_match_neg: difference match at xi=",xi,", yj=",yj));
+            intersection() {
                 translate([-xi,-yj]) offset(delta=1.0) intersection()  {
                     union() children();
                     translate([xi,yj]) square([1,1],center=false);
@@ -84,7 +114,11 @@ module test_2x2_grid_rotate_pattern(pattern=[[1,0],[1,1]],delta=0.0) {
 module ca_2x2_grid_match(pattern=[[1,0],[1,1]],grid_size=[10,10]) {
     echo(str("ca_2x2_grid_match: $children = ",$children));
     for(gxi=[0:grid_size[0]],gyj=[0:grid_size[1]]) translate([2*gxi,2*gyj]) {
-        ca_2x2_match(pattern=pattern) translate([-2*gxi,-2*gyj]) children();
+        //ca_2x2_match(pattern=pattern) translate([-2*gxi,-2*gyj]) children();
+        difference() {
+            ca_2x2_match_pos(pattern=pattern) translate([-2*gxi,-2*gyj]) children();
+            ca_2x2_match_neg(pattern=pattern) translate([-2*gxi,-2*gyj]) children();
+        }
     }
 }
 
