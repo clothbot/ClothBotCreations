@@ -1,7 +1,9 @@
 // corner relief
 in2mm=25.4;
 test_render="test corner_relief";
-test_render="test complex corner_relief";
+test_render="test complex corner_relief";
+test_render="test acute corner_relief";
+
 
 test_frame_size=in2mm*[10,10];
 test_frame_wall_th=1.0*in2mm;
@@ -12,15 +14,20 @@ module frame(size=[20,10],wall_th=2.0) {
         square(size,center=true);
         square([size[0]-2*wall_th,size[1]-2*wall_th],center=true);
     }
-}
+}
 
 //%frame(size=[100,100]);
-module corner_relief(d=1/16,delta=0.1) {
+module corner_relief(d=1/16,delta=0.1,mode="miter") {
     %children();
     minkowski() {
-        difference() {
-            offset(join_type="bevel",delta=-delta,$fn=16) children();
-            offset(join_type="miter",delta=-delta,$fn=16) children();
+        difference() {
+            if(mode=="round") {
+                offset(join_type="round",delta=-delta,$fn=16) children();
+            }
+            offset(join_type="bevel",delta=-delta,$fn=16) children();
+            if(mode=="miter") {
+                offset(join_type="miter",delta=-delta,$fn=16) children();
+            }
         }
         circle(d=d-delta,$fn=16);
     }
@@ -47,26 +54,49 @@ if(test_render=="test corner_relief") {
     }        
 }
 
-module complex_frame(size=[20,10],wall_th=2.0) {
+module complex_frame(size=[20,10],wall_th=2.0) {
+    difference() {
+        union() {
+            square(size,center=true);
+            rotate(45) square(size,center=true);
+        }
+        square([size[0]-2*wall_th,size[1]-2*wall_th],center=true);
+        rotate(45) square([size[0]-2*wall_th,size[1]-2*wall_th],center=true);
+    }
+}
+
+if(test_render=="test complex corner_relief") {
+    echo("Testing corner_relief.");
+    for(xi=[-1,1],yj=[-1,1]) {
+        translate([xi*(test_frame_size[0]/2-test_frame_wall_th-test_tool_d),yj*(test_frame_size[1]/2-test_frame_wall_th-test_tool_d)]) % circle(d=test_tool_d,$fn=16);
+    }
+    difference() {
+        complex_frame(size=test_frame_size,wall_th=test_frame_wall_th);
+        corner_relief(d=test_tool_d,delta=0.1) {
+            complex_frame(size=test_frame_size,wall_th=test_frame_wall_th);
+        }
+    }        
+}
+
+module acute_frame(size=[20,10],wall_th=2.0) {
     difference() {
         union() {
             square(size,center=true);
             rotate(45) square(size,center=true);
         }
-        square([size[0]-2*wall_th,size[1]-2*wall_th],center=true);
-        rotate(45) square([size[0]-2*wall_th,size[1]-2*wall_th],center=true);
+        circle(d=sqrt(pow(size[0],2)+pow(size[1],2))/2,$fn=3);
     }
 }
 
-if(test_render=="test complex corner_relief") {
-    echo("Testing corner_relief.");
+if(test_render=="test acute corner_relief") {
+    echo("Testing acute corner_relief.");
     for(xi=[-1,1],yj=[-1,1]) {
         translate([xi*(test_frame_size[0]/2-test_frame_wall_th-test_tool_d),yj*(test_frame_size[1]/2-test_frame_wall_th-test_tool_d)]) % circle(d=test_tool_d,$fn=16);
     }
     difference() {
-        complex_frame(size=test_frame_size,wall_th=test_frame_wall_th);
-        corner_relief(d=test_tool_d,delta=0.1) {
-            complex_frame(size=test_frame_size,wall_th=test_frame_wall_th);
+        acute_frame(size=test_frame_size,wall_th=test_frame_wall_th);
+        corner_relief(d=test_tool_d,delta=0.1,mode="round") {
+            acute_frame(size=test_frame_size,wall_th=test_frame_wall_th);
         }
     }        
-}
+}
