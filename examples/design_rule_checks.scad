@@ -1,8 +1,8 @@
 // Identify thinner sections.
-test_module="test offset_3d";
+test_module="test inner_offset_3d";
 test_module="test drc_thinner";
 
-module offset_3d(delta=0.1) {
+module inner_offset_3d(delta=0.1) {
     intersection_for(i=[0:7]) {
         if(i==0) {
             translate([0,0,-delta]) children();
@@ -14,9 +14,9 @@ module offset_3d(delta=0.1) {
     }
 }
 
-if(test_module=="test offset_3d") {
+if(test_module=="test inner_offset_3d") {
     % cylinder(r1=10,r2=0,h=10);
-    offset_3d(delta=0.5) cylinder(r1=10,r2=0,h=10);
+    inner_offset_3d(delta=0.5) cylinder(r1=10,r2=0,h=10);
 }
 
 module drc_thinner(delta=0.1) {
@@ -25,7 +25,7 @@ module drc_thinner(delta=0.1) {
         intersection() {
             children();
             minkowski() {
-                offset_3d(delta=delta) children();
+                inner_offset_3d(delta=delta) children();
                 hull() {
                     cylinder(r1=delta,r2=0,h=delta);
                     rotate([180,0,0]) cylinder(r1=delta,r2=0,h=delta);
