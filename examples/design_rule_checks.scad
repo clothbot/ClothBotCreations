@@ -38,7 +38,11 @@ module drc_thinner(delta=0.1) {
 
 if(test_module=="test drc_thinner") {
     %cylinder(r1=10,r2=0,h=20);
+    translate([0,0,40]) rotate([180,0,0]) %cylinder(r1=10,r2=0,h=20);
     #cylinder(r=8.0,h=1.0);
-    drc_thinner(delta=1.0) cylinder(r1=10,r2=0,h=20);
+    drc_thinner(delta=1.0) {
+        cylinder(r1=10,r2=0,h=20);
+        translate([0,0,40]) rotate([180,0,0]) cylinder(r1=10,r2=0,h=20);
+    }
 }
 
