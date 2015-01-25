@@ -8,8 +8,8 @@ function circle_circumference(r)=2*pi()*r;
 
 // angle=360*l/circle_circumference(r)
 // r*[cos(angle),sin(angle)]
-function circle_point_at_length(r,l,offset=[0,0],rotate=0)=[r*cos(rotate+360*l/circle_circumference(r))
-    , r*sin(rotate+360*l/circle_circumference(r)) ]+offset;
+function circle_point_at_length(r,l,offset=[0,0],rotate=0)=(r==0.0)?[0,l]
+    :[r*cos(rotate+360*l/circle_circumference(r)), r*sin(rotate+360*l/circle_circumference(r)) ]+offset;
 
 subdivisions=10;
 path_length=128;
