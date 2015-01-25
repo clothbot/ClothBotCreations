@@ -5,8 +5,8 @@
 use <../utilities/circular.scad>;
 
 test_module="test watchstrap_link";
-test_module="test watchstrap_adjustment_band";
-test_module="test watchstrap_buckle_band";
+//test_module="test watchstrap_adjustment_band";
+//test_module="test watchstrap_buckle_band";
 //test_module="test watchstrap_free_loop";
 //test_module="test plated";
 test_module="test shapeways";
@@ -61,6 +61,8 @@ module watchstrap_link( link_start_pt=[0,0], link_end_pt=[adjustment_band_hole_s
     , text=""
     , debug=global_debug
     , invert=false
+    , min_clearance=global_min_clearance
+    , fill_hole=false
 ) {
     link_mid_pt=link_start_pt+(link_end_pt-link_start_pt)/2;
     link_l=norm(link_end_pt-link_start_pt);
@@ -84,17 +86,99 @@ module watchstrap_link( link_start_pt=[0,0], link_end_pt=[adjustment_band_hole_s
         echo(str("    link_angle = ",link_angle));
     }
     translate(link_mid_pt) rotate([0,(invert)?180:0,link_angle]) {
-        translate([-link_l/2,0]) hull() {
-            translate([0,0,w/2-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
-            translate([0,0,-w/2]) cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+        translate([0,0,-w/2+2*min_wall_th+min_clearance]) difference() {
+            hull() {
+                translate([-link_l/2,0]) {
+                    cylinder(r1=th/2+min_clearance+min_wall_th-hole_bevel,r2=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                    translate([0,0,2*min_wall_th-hole_bevel]) 
+                        cylinder(r2=th/2+min_clearance+min_wall_th-hole_bevel,r1=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                }
+                translate([0,0]) {
+                    cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                    translate([0,0,2*min_wall_th-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                }
+            }
+            if(!fill_hole) translate([-link_l/2,0,-min_clearance]) {
+                cylinder(r=th/2+min_clearance,h=2*min_wall_th+2*min_clearance,center=false,$fn=16);
+            }
         }
-        translate([link_l/2,0]) hull() {
-            translate([0,0,w/2-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
-            translate([0,0,-w/2]) cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+        translate([0,0,-w/2+2*min_wall_th+min_clearance]) {
+            translate([link_l/2,0]) hull() {
+                translate([0,0,-2*min_wall_th-min_clearance]) cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,4*min_wall_th+min_clearance-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+            }
+            translate([link_l/2,0,-2*min_wall_th-min_clearance]) hull() {
+                scale([1,0.5,1]) cylinder(r1=th/2+min_clearance+min_wall_th-hole_bevel,r2=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                translate([0,0,2*min_wall_th-hole_bevel]) 
+                    scale([1,0.5,1]) cylinder(r2=th/2+min_clearance+min_wall_th-hole_bevel,r1=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                translate([0,0,2*min_wall_th+min_clearance-hole_bevel])
+                    cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+            }
+            translate([0,0,2*min_wall_th+min_clearance]) hull() {
+                cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,2*min_wall_th-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                translate([link_l/2,0]) {
+                    cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                    translate([0,0,2*min_wall_th-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                }
+            }
+            hull() {
+                cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,4*min_wall_th+min_clearance-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+            }
+        }
+        translate([0,0,w/2-2*min_wall_th-min_clearance]) rotate([180,0,0]) difference() {
+            hull() {
+                translate([-link_l/2,0]) {
+                    cylinder(r1=th/2+min_clearance+min_wall_th-hole_bevel,r2=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                    translate([0,0,2*min_wall_th-hole_bevel]) 
+                        cylinder(r2=th/2+min_clearance+min_wall_th-hole_bevel,r1=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                }
+                translate([0,0]) {
+                    cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                    translate([0,0,2*min_wall_th-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                }
+            }
+            if(!fill_hole) translate([-link_l/2,0,-min_clearance]) {
+                cylinder(r=th/2+min_clearance,h=2*min_wall_th+2*min_clearance,center=false,$fn=16);
+            }
+        }
+        translate([0,0,w/2-2*min_wall_th-min_clearance]) rotate([180,0,0]) {
+            translate([link_l/2,0]) hull() {
+                translate([0,0,-2*min_wall_th-min_clearance])cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,4*min_wall_th+min_clearance-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+            }
+            translate([link_l/2,0,-2*min_wall_th-min_clearance]) hull() {
+                scale([1,0.5,1]) cylinder(r1=th/2+min_clearance+min_wall_th-hole_bevel,r2=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                translate([0,0,2*min_wall_th-hole_bevel]) 
+                    scale([1,0.5,1]) cylinder(r2=th/2+min_clearance+min_wall_th-hole_bevel,r1=th/2+min_clearance+min_wall_th,h=hole_bevel,$fn=16,center=false);
+                translate([0,0,2*min_wall_th+min_clearance-hole_bevel])
+                    cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+            }
+            translate([0,0,2*min_wall_th+min_clearance]) hull() {
+                cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,2*min_wall_th-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                translate([link_l/2,0]) {
+                    cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                    translate([0,0,2*min_wall_th-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                }
+            }
+            hull() {
+                cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,4*min_wall_th+min_clearance-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+            }
+        }
+        if(false) translate([-link_l/2,0]) {
+            hull() {
+                translate([0,0,w/2-hole_bevel]) cylinder(r1=th/2,r2=th/2-hole_bevel,h=hole_bevel,$fn=8,center=false);
+                translate([0,0,w/2-2*min_wall_th]) cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+            }
         }
         hull() {
-            translate([0,-(th-min_wall_th)/2,0]) cube([hole_l+2*min_wall_th,min_wall_th,hole_l+2*min_wall_th],center=true);
-            cube([link_l-th/2,min_wall_th,w-th],center=true);
+            translate([0,-(th-min_wall_th)/2,0]) cube([hole_l+4*min_wall_th,min_wall_th,hole_l+2*min_wall_th],center=true);
+            translate([0,0,-w/2+4*min_wall_th+2*min_clearance]) cylinder(r1=th/2-hole_bevel,r2=th/2,h=hole_bevel,$fn=8,center=false);
+            translate([0,0,w/2-4*min_wall_th-2*min_clearance-hole_bevel]) cylinder(r2=th/2-hole_bevel,r1=th/2,h=hole_bevel,$fn=8,center=false);
+            //cube([link_l-th/2,min_wall_th,w-th],center=true);
         }
         if(text!="") translate([0,-th/2,0]) rotate([90,0,0]) minkowski() {
             render() linear_extrude(height=min_wall_th/2,center=true) {
@@ -179,7 +263,8 @@ module watchstrap_adjustment_band(l=adjustment_band_l
             color([0,1,0]) for(i=[1:pre_offset_hole_count-1]) {
                 watchstrap_link( link_start_pt=circle_point_at_length(bend_r,(i-0.5)*hole_spacing+band_offset+lead_in_l,rotate=-90,offset=[0,bend_r] )
                     , link_end_pt=circle_point_at_length(bend_r,(i+0.5)*hole_spacing+band_offset+lead_in_l,rotate=-90,offset=[0,bend_r] )
-                    ,w=w,th=th,hole_l=hole_l,hole_w=hole_w,hole_bevel=hole_bevel,hole_grow=hole_grow,min_wall_th=min_wall_th, debug=debug,text=word[i-1]);
+                    ,w=w,th=th,hole_l=hole_l,hole_w=hole_w,hole_bevel=hole_bevel,hole_grow=hole_grow,min_wall_th=min_wall_th
+                    , debug=debug,text=word[i-1],fill_hole=(i==1));
             }
             color([0,0,1]) for(i=[0:hole_count-1]) {
                 watchstrap_link( link_start_pt=circle_point_at_length(bend_r,hole_offset+(i-0.5)*hole_spacing+band_offset,rotate=-90,offset=[0,bend_r] )
@@ -313,7 +398,8 @@ module watchstrap_buckle_band(l=buckle_band_l
                     , link_end_pt=circle_point_at_length(bend_r,(i+0.5)*hole_spacing+band_offset+lead_in_l,rotate=-90,offset=[0,bend_r] )
                     ,w=w,th=th,hole_l=hole_l,hole_w=hole_w,hole_bevel=hole_bevel,hole_grow=hole_grow,min_wall_th=min_wall_th, debug=false
                     ,text=letter
-                    ,invert=true);
+                    ,invert=true
+                    ,fill_hole=(i==holes_count-1));
             }
             color([1,1,0]) hull() {
                 translate( circle_point_at_length(bend_r,l-lead_in_l-hole_spacing/2+band_offset,rotate=-90,offset=[0,bend_r] ) ) {
