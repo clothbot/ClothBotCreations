@@ -48,27 +48,33 @@ if(render_part=="null space") {
     //intersection() {
         //# scale(1.5) cube();
         # minkowski() {
-            intersection() {
-                translate([-0.75*dt,0,0]) # cube();
-                translate([0.75*dt,0,0]) # cube();
-            }
+            translate([2,2,2]) cube(0);
             cube();
         }
     //}
 }
 
+module minkowski_null(delta=[1,1,1]) {
+    translate(-delta) difference() {
+        minkowski() {
+            children(0);
+            translate(delta) children(1);
+        }
+        children(0);
+    }
+}
 module quantize_array(dx=1.0,dy=1.0,dz=1.0,minCoord=[-2,-2,-2],maxCoord=[2,2,2],iteration=2,scale=0.5) {
     for(xi=[minCoord[0]:dx:maxCoord[0]]) {
         for(yj=[minCoord[1]:dy:maxCoord[1]]) {
             for(zk=[minCoord[2]:dz:maxCoord[2]]) {
                 // echo(str("ca_map: ",xi,",",yj,",",zk,";"));
                 intersection() {
-                    minkowski() {
+                    render() minkowski_null([2*dx,2*dy,2*dz]) {
+                        cube([2*dx,2*dy,2*dz],center=true);
                         intersection() {
                             children();
                             translate([xi,yj,zk]) cube([dx,dy,dz],center=true);
                         }
-                        cube([2*dx,2*dy,2*dz],center=true);
                     }
                     translate([xi,yj,zk]) cube(scale*[dx,dy,dz],center=true);
                 }
@@ -93,8 +99,8 @@ module cube_mask(dx=1.0,dy=1.0,dz=1.0,minCoord=[-2,-2,-2],maxCoord=[2,2,2],scale
 
 //
 if(render_part=="quantize array") {
-    quantize_array(minCoord=[-2,-2,-2],maxCoord=[2,2,2],dx=0.5,dy=0.5,dz=0.5) cube([2.5,2.5,2.5],center=true);
-    %cube([2.5,2.5,2.5],center=true);
+    quantize_array(minCoord=[0,0,0],maxCoord=[4,4,4],dx=0.5,dy=0.5,dz=0.5) translate([0.5,0.5,0.5]) cube([2.5,2.5,2.5],center=false);
+    translate([0.5,0.5,0.5]) %cube([2.5,2.5,2.5],center=false);
 }
 
 if(render_part==3) {
@@ -105,12 +111,18 @@ if(render_part==3) {
     translate([5,5,0]) %sphere(d=2.5);
 }
 
-if(render_part=="rotated cube") {
-	quantize_array(minCoord=[-2,-2,-2],maxCoord=[2,2,2],dx=0.25,dy=0.25,dz=0.25,scale=0.707)
-		render() rotate([30,30,30]) difference() {
+if(render_part=="rotated cube") union() {
+	quantize_array(minCoord=[0,0,0],maxCoord=[5,5,5],dx=0.2,dy=0.2,dz=0.2,scale=0.707)
+		translate([2,2,2]) render() rotate([30,30,30]) difference() {
 			cube([2.5,2.5,2.5],center=true);
-			cube([2.0,2.0,2.0],center=true);
+			cube([2.4,2.4,2.4],center=true);
 			cube([2.5,2.5,2.5],center=false);
 		}
-	rotate([30,30,30]) %cube([2.5,2.5,2.5],center=true);
+    translate([2,2,2]) render() rotate([30,30,30]) difference() {
+			cube([2.5,2.5,2.5],center=true);
+			cube([2.4,2.4,2.4],center=true);
+			cube([2.5,2.5,2.5],center=false);
+		}
+	translate([2,2,2]) rotate([30,30,30]) %cube([2.5,2.5,2.5],center=true);
+    %cube([0.5,0.5,0.5],center=true);
 }
