@@ -1,6 +1,7 @@
 // Spherical Functions
 
 test_module="test sphere_points";
+test_module="test sphere_poly";
 
 function pi()=3.14159265358979323846;
 
@@ -79,3 +80,37 @@ module sphere_map2Points(radius=1.0,N=3) assign(
 	translate([radius*cos(360*phi/(2*pi()))*r,radius*y,radius*sin(360*phi/(2*pi()))*r]) child(0);
   }
 }
+
+function closest_back(start,next,coords,curr,delta=0.1)=
+    ( ( norm(coords[start]-coords[curr]) < (1+delta)*norm(coords[start]-coords[next]) )
+    &&( norm(coords[next]-coords[curr]) < (1+delta)*norm(coords[start]-coords[next]) )||curr==0)?curr:
+        closest_back(start,next,coords,curr-1,delta=delta);
+
+test_sphere_r2=100;
+test_sphere_N2=20;
+
+if(test_module=="test sphere_poly") {
+    echo("Testing sphere_poly...");
+    coords=sphere_points(test_sphere_r2,test_sphere_N2);
+    translate(coords[0]) color([1,1,1]) sphere(2);
+    for(i=[1:len(coords)-2]) {
+        pt1=coords[i];
+        pt2=coords[i+1];
+        cb=closest_back(i,i+1,coords,i-1);
+        echo(str("i:",i," pt1:",pt1," pt2:",pt2," cb:",cb));
+        echo(str("  norm(pt1-pt2): ",norm(pt1-pt2)));
+        color([1,0,0]) hull() {
+            translate(pt1) cube();
+            translate(pt2) cube();
+        }
+        color([0,1,0]) hull() {
+            translate(pt1) sphere();
+            translate(coords[cb]) sphere();
+        }
+        color([0,0,1]) hull() {
+            translate(pt1) cylinder();
+            translate(coords[cb]) cylinder();
+        }
+    }
+}
+
