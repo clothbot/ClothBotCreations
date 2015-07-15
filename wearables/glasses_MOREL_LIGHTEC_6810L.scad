@@ -3,6 +3,11 @@
 // Model: LIGHTEC 6810L
 // Parameters: 52[]17  140 GB 205
 
+render_part="glasses_arm_mount_slot_cutout";
+//render_part="glasses_arm";
+//render_part="glasses_ear";
+render_part="glasses_arm_pair";
+
 min_space=2.0;
 layer_th=0.2;
 nozzle_d=0.4;
@@ -64,6 +69,7 @@ glasses_arm_mount_hole=[
 //glasses_arm_mount_slot_w=4.82;
 glasses_arm_mount_slot_w=4.0+grow_hole_abs;
 glasses_arm_mount_slot_l=13.64;
+// glasses_arm_mount_slot_l=20;
 glasses_arm_mount_slot_dy=[0,1]*glasses_arm_mount_hole_offset;
 glasses_arm_mount_slot_th=0.84;
 glasses_arm_mount_slot=[
@@ -120,16 +126,18 @@ module glasses_arm_mount_slot_cutout() {
         translate([0,0,4*layer_th])
             linear_extrude(layer_th) intersection() {
                 offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
-                polygon(glasses_arm_outline,convexity=10);
+                offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
             }
-        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) 
-            offset(glasses_arm_mount_hole_w) polygon(glasses_arm_mount_hole,convexity=10);
+        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) offset(-glasses_arm_mount_slot_th) intersection() {
+            polygon(glasses_arm_mount_slot,convexity=10);
+            offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+        }
     }
-    translate([0,0,4*layer_th]) linear_extrude(glasses_arm_mount_slot_th) intersection() {
+    translate([0,0,4*layer_th]) linear_extrude(glasses_arm_mount_slot_th+layer_th) intersection() {
         offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
         difference() {
             offset(grow_hole_abs) polygon(glasses_arm_outline,convexity=10);
-            offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+            offset(-3*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
         }
     }
     hull() {
@@ -146,7 +154,10 @@ module glasses_arm_mount_slot_cutout() {
     
 }
 
-//glasses_arm_mount_slot_cutout();
+if(render_part=="glasses_arm_mount_slot_cutout") {
+    echo("Rendering glasses_arm_mount_slot_cutout()");
+    glasses_arm_mount_slot_cutout();
+}
 
 module glasses_arm() {
     difference() {
@@ -163,11 +174,20 @@ module glasses_arm() {
     }
 }
 
+if(render_part=="glasses_arm") {
+    echo("Rendering glasses_arm()");
+    glasses_arm();
+}
+
 module glasses_ear() {
     linear_extrude(glasses_ear_outline_th) polygon(glasses_ear_outline,convexity=10);
     linear_extrude(glasses_ear_inline_th) polygon(glasses_ear_inline,convexity=10);
 }
 
+if(render_part=="glasses_ear") {
+    echo("Rendering glasses_ear()");
+    glasses_ear();
+}
 
 module glasses_arm_pair() {
     translate(glasses_arm_outline_end_pt+[-glasses_arm_outline_bbox[1][0]/2,min_space]) union() {
@@ -182,4 +202,8 @@ module glasses_arm_pair() {
     }
 }
 
-glasses_arm_pair();
+if(render_part=="glasses_arm_pair") {
+    echo("Rendering glasses_arm_pair()");
+    glasses_arm_pair();
+}
+
