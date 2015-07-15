@@ -61,7 +61,8 @@ glasses_arm_mount_hole=[
     ,glasses_arm_mount_hole_offset+[glasses_arm_mount_hole_l,glasses_arm_mount_hole_w/2]
     ,glasses_arm_mount_hole_offset+[glasses_arm_mount_hole_l,-glasses_arm_mount_hole_w/2]
 ];
-glasses_arm_mount_slot_w=4.82;
+//glasses_arm_mount_slot_w=4.82;
+glasses_arm_mount_slot_w=4.0+grow_hole_abs;
 glasses_arm_mount_slot_l=13.64;
 glasses_arm_mount_slot_dy=[0,1]*glasses_arm_mount_hole_offset;
 glasses_arm_mount_slot_th=0.84;
@@ -115,16 +116,37 @@ glasses_ear_outline_th=2.00;
 glasses_ear_inline_th=2.50;
 
 module glasses_arm_mount_slot_cutout() {
-    translate([0,0,4*layer_th])
-        linear_extrude(glasses_arm_mount_slot_th+grow_hole_abs,center=false) offset(glasses_arm_mount_slot_th) polygon(glasses_arm_mount_slot,convexity=10);
-    linear_extrude(4*glasses_arm_mount_slot_th,center=true) intersection() {
+    hull() {
+        translate([0,0,4*layer_th])
+            linear_extrude(layer_th) intersection() {
+                offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
+                polygon(glasses_arm_outline,convexity=10);
+            }
+        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) 
+            offset(glasses_arm_mount_hole_w) polygon(glasses_arm_mount_hole,convexity=10);
+    }
+    translate([0,0,4*layer_th]) linear_extrude(glasses_arm_mount_slot_th) intersection() {
+        offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
+        difference() {
+            offset(grow_hole_abs) polygon(glasses_arm_outline,convexity=10);
+            offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+        }
+    }
+    hull() {
+        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/2,center=false) polygon(glasses_arm_mount_hole,convexity=10);
+        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) offset(glasses_arm_mount_hole_w) polygon(glasses_arm_mount_hole,convexity=10);
+    }
+    translate([0,0,-layer_th]) linear_extrude(4*layer_th+layer_th,center=false) intersection() {
         difference() {
             polygon(glasses_arm_mount_slot,convexity=10);
             offset(-glasses_arm_mount_slot_th) polygon(glasses_arm_mount_slot,convexity=10);
         }
         offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
     }
+    
 }
+
+//glasses_arm_mount_slot_cutout();
 
 module glasses_arm() {
     difference() {
