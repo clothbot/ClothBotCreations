@@ -78,12 +78,12 @@ glasses_arm_mount_slot=[
     ,[glasses_arm_mount_slot_l,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
     ,[0,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
 ];
-glasses_arm_mount_slot_h=5.67-0.7-1.45-glasses_arm_mount_slot_th/2;
+glasses_arm_mount_slot_h=5.67-0.7-1.45-glasses_arm_mount_slot_th/2-3*layer_th;
 echo(str("glasses_arm_mount_slot_h = ",glasses_arm_mount_slot_h));
 
-glasses_arm_outline_th=2.10;
-glasses_arm_inline_th=2.60;
-glasses_arm_inner_th=1.60;
+glasses_arm_outline_th=2.10-2*layer_th;
+glasses_arm_inline_th=2.60-2*layer_th;
+glasses_arm_inner_th=1.60-layer_th;
 
 glasses_ear_outline_extend=[3.0,0];
 glasses_ear_outline_start_pt=[83.0,0];
@@ -118,8 +118,8 @@ glasses_ear_inline_bbox=[
         , quicksort_y(glasses_ear_inline)[len(glasses_ear_inline)-1][1] ]
     ];
 echo(str("glasses_ear_inline_bbox = ",glasses_ear_inline_bbox));
-glasses_ear_outline_th=2.00;
-glasses_ear_inline_th=2.50;
+glasses_ear_outline_th=2.00-2*layer_th;
+glasses_ear_inline_th=2.50-2*layer_th;
 
 module glasses_arm_mount_slot_cutout() {
     hull() {
@@ -128,12 +128,12 @@ module glasses_arm_mount_slot_cutout() {
                 offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
                 offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
             }
-        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) offset(-glasses_arm_mount_slot_th) intersection() {
+        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4-layer_th,center=false) offset(-glasses_arm_mount_slot_th) intersection() {
             polygon(glasses_arm_mount_slot,convexity=10);
             offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
         }
     }
-    translate([0,0,4*layer_th]) linear_extrude(glasses_arm_mount_slot_th+layer_th) intersection() {
+    translate([0,0,3*layer_th]) linear_extrude(glasses_arm_mount_slot_th+layer_th) intersection() {
         offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
         difference() {
             offset(grow_hole_abs) polygon(glasses_arm_outline,convexity=10);
