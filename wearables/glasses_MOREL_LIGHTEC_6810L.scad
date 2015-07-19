@@ -4,7 +4,7 @@
 // Parameters: 52[]17  140 GB 205
 
 render_part="glasses_arm_mount_slot_cutout";
-//render_part="glasses_arm";
+render_part="glasses_arm";
 //render_part="glasses_ear";
 render_part="glasses_arm_pair";
 
@@ -57,8 +57,8 @@ glasses_arm_inline_bbox=[
         , quicksort_y(glasses_arm_inline)[len(glasses_arm_inline)-1][1] ]
     ];
 echo(str("glasses_arm_inline_bbox = ",glasses_arm_inline_bbox));
-glasses_arm_mount_hole_w=0.9+grow_hole_abs;
-glasses_arm_mount_hole_l=3.82+grow_hole_abs;
+glasses_arm_mount_hole_w=0.9+2*grow_hole_abs;
+glasses_arm_mount_hole_l=3.82+0.5*grow_hole_abs;
 glasses_arm_mount_hole_offset=(glasses_arm_outline_end_pt-glasses_arm_outline_start_pt)/2+[2.27,0];
 glasses_arm_mount_hole=[
     glasses_arm_mount_hole_offset+[0,-glasses_arm_mount_hole_w/2]
@@ -66,16 +66,18 @@ glasses_arm_mount_hole=[
     ,glasses_arm_mount_hole_offset+[glasses_arm_mount_hole_l,glasses_arm_mount_hole_w/2]
     ,glasses_arm_mount_hole_offset+[glasses_arm_mount_hole_l,-glasses_arm_mount_hole_w/2]
 ];
+glasses_arm_mount_slot_th=0.84;
 //glasses_arm_mount_slot_w=4.82;
 glasses_arm_mount_slot_w=4.0+grow_hole_abs;
-glasses_arm_mount_slot_l=13.64;
+glasses_arm_mount_slot_l=13.64+5*glasses_arm_mount_slot_th;
 // glasses_arm_mount_slot_l=20;
 glasses_arm_mount_slot_dy=[0,1]*glasses_arm_mount_hole_offset;
-glasses_arm_mount_slot_th=0.84;
 glasses_arm_mount_slot=[
     [0,glasses_arm_mount_slot_dy-glasses_arm_mount_slot_w/2]
     ,[glasses_arm_mount_slot_l,glasses_arm_mount_slot_dy-glasses_arm_mount_slot_w/2]
+//    ,[glasses_arm_mount_hole_offset[0]+glasses_arm_mount_hole_l/2,glasses_arm_mount_slot_dy-glasses_arm_mount_slot_w/2]
     ,[glasses_arm_mount_slot_l,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
+//    ,[glasses_arm_mount_hole_offset[0]+glasses_arm_mount_hole_l/2,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
     ,[0,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
 ];
 glasses_arm_mount_slot_h=5.67-0.7-1.45-glasses_arm_mount_slot_th/2-3*layer_th;
@@ -122,36 +124,43 @@ glasses_ear_outline_th=2.00-2*layer_th;
 glasses_ear_inline_th=2.50-2*layer_th;
 
 module glasses_arm_mount_slot_cutout() {
+    // top of tongue
     hull() {
         translate([0,0,4*layer_th])
             linear_extrude(layer_th) intersection() {
                 offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
-                offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+                offset(-3.5*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
             }
         translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4-layer_th,center=false) offset(-glasses_arm_mount_slot_th) intersection() {
             polygon(glasses_arm_mount_slot,convexity=10);
-            offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+            offset(-3.5*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
         }
     }
+    // sides of tongue
+    translate([0,0,-layer_th]) linear_extrude(4*layer_th+layer_th,center=false) intersection() {
+        difference() {
+            polygon(glasses_arm_mount_slot,convexity=10);
+            translate([glasses_arm_mount_slot_th,0]) offset(-glasses_arm_mount_slot_th) polygon(glasses_arm_mount_slot,convexity=10);
+        }
+        offset(-3.5*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+    }
+    // end slot
     translate([0,0,3*layer_th]) linear_extrude(glasses_arm_mount_slot_th+layer_th) intersection() {
         offset(glasses_arm_mount_slot_th/4) polygon(glasses_arm_mount_slot,convexity=10);
         difference() {
             offset(grow_hole_abs) polygon(glasses_arm_outline,convexity=10);
-            offset(-3*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+            offset(-1.5*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
         }
     }
+    // upper cavity
     hull() {
         translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/2,center=false) polygon(glasses_arm_mount_hole,convexity=10);
         translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) offset(glasses_arm_mount_hole_w) polygon(glasses_arm_mount_hole,convexity=10);
     }
-    translate([0,0,-layer_th]) linear_extrude(4*layer_th+layer_th,center=false) intersection() {
-        difference() {
-            polygon(glasses_arm_mount_slot,convexity=10);
-            offset(-glasses_arm_mount_slot_th) polygon(glasses_arm_mount_slot,convexity=10);
-        }
-        offset(-2*glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
+    translate(glasses_arm_mount_hole_offset+[glasses_arm_mount_hole_l/2-0.5*glasses_arm_mount_slot_th,-glasses_arm_mount_slot_w/2]) 
+        translate([0,0,-layer_th]) {
+            linear_extrude(layer_th+4*layer_th) square([1.5*glasses_arm_mount_slot_th,glasses_arm_mount_slot_w],center=false);
     }
-    
 }
 
 if(render_part=="glasses_arm_mount_slot_cutout") {
@@ -163,9 +172,25 @@ module glasses_arm() {
     difference() {
         difference() {
             union() {
-                linear_extrude(glasses_arm_outline_th-glasses_arm_mount_slot_th) polygon(glasses_arm_outline,convexity=10);
-                linear_extrude(glasses_arm_inline_th) polygon(glasses_arm_inline,convexity=10);
-                linear_extrude(glasses_arm_mount_slot_h) offset(-glasses_arm_mount_slot_th) polygon(glasses_arm_inline,convexity=10);
+                render() minkowski() {
+                    linear_extrude(glasses_arm_outline_th-0*glasses_arm_mount_slot_th-4*layer_th) 
+                        offset(-layer_th) polygon(glasses_arm_outline,convexity=10);
+                    hull() {
+                        cylinder(r1=0,r2=2*layer_th,h=2*layer_th,center=false,$fn=8);
+                        translate([0,0,2*layer_th]) cylinder(r1=2*layer_th,r2=0,h=2*layer_th,center=false,$fn=8);
+                    }
+                }
+                render() minkowski() {
+                    linear_extrude(glasses_arm_inline_th-4*layer_th) offset(-2*layer_th) polygon(glasses_arm_inline,convexity=10);
+                    hull() {
+                        cylinder(r1=0,r2=2*layer_th,h=2*layer_th,center=false,$fn=8);
+                        translate([0,0,2*layer_th]) cylinder(r1=2*layer_th,r2=0,h=2*layer_th,center=false,$fn=8);
+                    }
+                }
+                render() minkowski() {
+                    linear_extrude(glasses_arm_mount_slot_h-2*layer_th) offset(-glasses_arm_mount_slot_th-2*layer_th) polygon(glasses_arm_inline,convexity=10);
+                    cylinder(r1=2*layer_th,r2=0,h=2*layer_th,center=false,$fn=8);
+                }
             }
             glasses_arm_mount_slot_cutout();
             
@@ -174,14 +199,34 @@ module glasses_arm() {
     }
 }
 
+module glasses_arm_inset() {
+    translate([0,0,glasses_arm_mount_slot_h-2*layer_th]) linear_extrude(3*layer_th)
+        offset(-glasses_arm_mount_slot_th-2*layer_th-2*nozzle_d) polygon(glasses_arm_inline,convexity=10);
+}
+
 if(render_part=="glasses_arm") {
     echo("Rendering glasses_arm()");
-    glasses_arm();
+    difference() {
+        glasses_arm();
+        #glasses_arm_inset();
+    }
 }
 
 module glasses_ear() {
-    linear_extrude(glasses_ear_outline_th) polygon(glasses_ear_outline,convexity=10);
-    linear_extrude(glasses_ear_inline_th) polygon(glasses_ear_inline,convexity=10);
+    render() minkowski() {
+        linear_extrude(glasses_ear_outline_th-4*layer_th) offset(-2*layer_th) polygon(glasses_ear_outline,convexity=10);
+        hull() {
+            cylinder(r1=0,r2=2*layer_th,h=2*layer_th,center=false,$fn=8);
+            translate([0,0,2*layer_th]) cylinder(r1=2*layer_th,r2=0,h=2*layer_th,center=false,$fn=8);
+        }
+    }
+    render() minkowski() {
+        linear_extrude(glasses_ear_inline_th-4*layer_th) offset(-2*layer_th) polygon(glasses_ear_inline,convexity=10);
+        hull() {
+            cylinder(r1=0,r2=2*layer_th,h=2*layer_th,center=false,$fn=8);
+            translate([0,0,2*layer_th]) cylinder(r1=2*layer_th,r2=0,h=2*layer_th,center=false,$fn=8);
+        }
+    }
 }
 
 if(render_part=="glasses_ear") {
