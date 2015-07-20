@@ -4,7 +4,7 @@
 // Parameters: 52[]17  140 GB 205
 
 render_part="glasses_arm_mount_slot_cutout";
-render_part="glasses_arm";
+//render_part="glasses_arm";
 //render_part="glasses_ear";
 render_part="glasses_arm_pair";
 
@@ -80,11 +80,11 @@ glasses_arm_mount_slot=[
 //    ,[glasses_arm_mount_hole_offset[0]+glasses_arm_mount_hole_l/2,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
     ,[0,glasses_arm_mount_slot_dy+glasses_arm_mount_slot_w/2]
 ];
-glasses_arm_mount_slot_h=5.67-0.7-1.45-glasses_arm_mount_slot_th/2-3*layer_th;
+glasses_arm_mount_slot_h=5.67-0.7-1.45-glasses_arm_mount_slot_th/2-1*layer_th;
 echo(str("glasses_arm_mount_slot_h = ",glasses_arm_mount_slot_h));
 
-glasses_arm_outline_th=2.10-2*layer_th;
-glasses_arm_inline_th=2.60-2*layer_th;
+glasses_arm_outline_th=2.10-3*layer_th;
+glasses_arm_inline_th=2.60-1*layer_th;
 glasses_arm_inner_th=1.60-layer_th;
 
 glasses_ear_outline_extend=[3.0,0];
@@ -120,8 +120,8 @@ glasses_ear_inline_bbox=[
         , quicksort_y(glasses_ear_inline)[len(glasses_ear_inline)-1][1] ]
     ];
 echo(str("glasses_ear_inline_bbox = ",glasses_ear_inline_bbox));
-glasses_ear_outline_th=2.00-2*layer_th;
-glasses_ear_inline_th=2.50-2*layer_th;
+glasses_ear_outline_th=2.00-3*layer_th;
+glasses_ear_inline_th=2.50-3*layer_th;
 
 module glasses_arm_mount_slot_cutout() {
     // top of tongue
@@ -154,7 +154,7 @@ module glasses_arm_mount_slot_cutout() {
     }
     // upper cavity
     hull() {
-        translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/2,center=false) polygon(glasses_arm_mount_hole,convexity=10);
+        translate([0,0,glasses_arm_mount_slot_h-glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/2-2*layer_th,center=false) polygon(glasses_arm_mount_hole,convexity=10);
         translate([0,0,glasses_arm_inline_th/2]) linear_extrude(glasses_arm_inline_th/4,center=false) offset(glasses_arm_mount_hole_w) polygon(glasses_arm_mount_hole,convexity=10);
     }
     translate(glasses_arm_mount_hole_offset+[glasses_arm_mount_hole_l/2-0.5*glasses_arm_mount_slot_th,-glasses_arm_mount_slot_w/2]) 
