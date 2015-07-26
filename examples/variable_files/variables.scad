@@ -1,8 +1,10 @@
 // Animation Test; variables file.
 
-mv_x=1.0;
+dt=1.0;
+
+mv_x=2.0;
 mv_y=20.0;
 mv_z=0.0;
 rot_x=15;
-rot_y=90;
+rot_y=45;
 rot_z=0;
