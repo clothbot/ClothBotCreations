@@ -9,21 +9,21 @@ module myShape() {
 
 %myShape();
 
-module extend_yp(d=1.0,overlap=0.1,scale_d=0.001) {
+module extend_yp(d=1.0,overlap=0.1,angle=0,scale_d=0.001) {
     intersection() {
         minkowski() {
-            translate([-overlap,0]) square([scale_d*d+overlap,d],center=false);
+            rotate(angle) translate([-overlap,0]) square([scale_d*d+overlap,d],center=false);
             children();
         }
         minkowski() {
-            translate([overlap,0]) mirror([1,0]) square([scale_d*d+overlap,d],center=false);
+            rotate(angle) translate([overlap,0]) mirror([1,0]) square([scale_d*d+overlap,d],center=false);
             children();
         }
     }
 }
 
 difference() {
-    extend_yp(4,0) myShape();
+    extend_yp(4,0,360*$t) myShape();
     myShape();
 }
 
