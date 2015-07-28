@@ -9,14 +9,14 @@ module myShape() {
 
 %myShape();
 
-module extend_yp(d=1.0,overlap=0.1) {
+module extend_yp(d=1.0,overlap=0.1,scale_d=0.001) {
     intersection() {
         minkowski() {
-            translate([-overlap,0]) square([0.01*d+overlap,d],center=false);
+            translate([-overlap,0]) square([scale_d*d+overlap,d],center=false);
             children();
         }
         minkowski() {
-            translate([overlap,0]) mirror([1,0]) square([0.01*d+overlap,d],center=false);
+            translate([overlap,0]) mirror([1,0]) square([scale_d*d+overlap,d],center=false);
             children();
         }
     }
