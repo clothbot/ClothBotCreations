@@ -23,11 +23,11 @@ if(render_test=="test bulge_cube") {
     }
 }
 
-module bulge_cone(h,scale_xy=0.1) {
+module bulge_cone(h,scale_xy=0.1,theta=0,phi=0) {
     intersection() {
         minkowski() {
             children();
-            scale([scale_xy,scale_xy,h]) render()
+            rotate([0,0,theta]) rotate([0,phi,0]) scale([scale_xy,scale_xy,h]) render()
                 cylinder(r2=1,r1=0,h=1,center=false,$fn=16);
         }
     }
@@ -36,8 +36,9 @@ module bulge_cone(h,scale_xy=0.1) {
 if(render_test=="test bulge_cone") {
     %sphere(10);
     difference() {
-        bulge_cone(2,0.01) sphere(10);
+        bulge_cone(1,0.001,360*$t,360*$t) sphere(10);
         sphere(10);
         cube(20,center=false);
     }
 }
+
