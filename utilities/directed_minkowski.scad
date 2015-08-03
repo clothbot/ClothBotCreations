@@ -25,14 +25,10 @@ if(render_test=="test bulge_cube") {
 
 module bulge_cone(h,scale_xy=0.1) {
     intersection() {
-        for(i=[0:1],j=[0:1]) {
-            minkowski() {
-                children();
-                mirror([i,j]) scale([scale_xy,scale_xy,h]) render() intersection() {
-                    cube(1,center=false);
-                    cylinder(r1=1,r2=0,h=1,center=false,$fn=16);
-                }
-            }
+        minkowski() {
+            children();
+            scale([scale_xy,scale_xy,h]) render()
+                cylinder(r2=1,r1=0,h=1,center=false,$fn=16);
         }
     }
 }
@@ -40,7 +36,7 @@ module bulge_cone(h,scale_xy=0.1) {
 if(render_test=="test bulge_cone") {
     %sphere(10);
     difference() {
-        bulge_cone(2) sphere(10);
+        bulge_cone(2,0.01) sphere(10);
         sphere(10);
         cube(20,center=false);
     }
