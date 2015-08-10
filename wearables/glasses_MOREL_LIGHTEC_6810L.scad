@@ -235,11 +235,11 @@ if(render_part=="glasses_ear") {
 }
 
 module glasses_arm_pair() {
-    translate(glasses_arm_outline_end_pt+[-glasses_arm_outline_bbox[1][0]/2,min_space]) union() {
+    color([0,0.8,0]) translate(glasses_arm_outline_end_pt+[-glasses_arm_outline_bbox[1][0]/2,min_space]) union() {
         glasses_arm();
         glasses_ear();
     }
-    translate([glasses_arm_outline_bbox[1][0]/2,0]) mirror([1,0,0]) {
+    color([0.8,0,0]) translate([glasses_arm_outline_bbox[1][0]/2,0]) mirror([1,0,0]) {
         union() {
             glasses_arm();
             glasses_ear();
