@@ -3,9 +3,9 @@
 $fs=0.1;
 $fa=15;
 
-// render_part=1; // Faceplate_Clip_Peg()
+ render_part=1; // Faceplate_Clip_Peg()
 //render_part=2; // Faceplate_Clip_Socket()
-render_part=3; // Faceplate_Clip_Peg and Faceplate_Clip_Socket
+//render_part=3; // Faceplate_Clip_Peg and Faceplate_Clip_Socket
 
 module Faceplate_Clip_Peg_Body(extension=0.1
 	, base_width=12.0
@@ -32,6 +32,10 @@ module Faceplate_Clip_Peg_Holes(extension=0.1
 	, base_slot_separation=30.0
 	, base_slot_width=25.4/8
 	, base_slot_length=11.0
+    , peg_hole_d=25.4/8
+    , peg_hole_thread_d=3.6
+    , peg_screw_head=6.8
+    , peg_fin_w=0.6
 	) {
   union() {
     translate([base_slot_separation/2+base_slot_width/2,-base_slot_width/2,-extension])
@@ -49,7 +53,14 @@ module Faceplate_Clip_Peg_Holes(extension=0.1
     translate([-base_slot_separation/2-base_slot_width/2,0,-extension])
       cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false);
   }
-  translate([0,0,-extension]) cylinder(r=base_slot_width/2,h=2*extension+base_height+peg_height,center=false);
+  translate([0,0,-extension]) {
+      cylinder(r=peg_hole_d/2,h=2*extension+base_height+peg_height,center=false);
+      translate([0,0,extension+peg_screw_head/4]) cylinder(r2=0,r1=peg_screw_head/2+2*extension,h=peg_screw_head/2+2*extension,center=true);
+      translate([0,0,(base_height+peg_height+extension)/2]) for(i=[0:3]) rotate([0,0,45*i+45]){
+          cube([peg_fin_w,peg_screw_head,base_height+peg_height+2*extension],center=true);
+      }
+      translate([0,0,base_height+peg_height-peg_screw_head/4+extension]) cylinder(r1=0,r2=peg_screw_head/2+2*extension,h=peg_screw_head/2+2*extension,center=true);
+  }
 }
 
 module Faceplate_Clip_Peg() {
@@ -61,7 +72,7 @@ module Faceplate_Clip_Peg() {
 
 if(render_part==1) {
   echo("Rendering Faceplate_Clip_Peg()...");
-  Faceplate_Clip_Peg();
+  rotate([0,0,90]) Faceplate_Clip_Peg();
 }
 
 module Faceplate_Clip_Socket_Body(extension=0.1
