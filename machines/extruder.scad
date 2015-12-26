@@ -6,7 +6,7 @@ spring_d = 8;
 
 //render_part="idler";
 //render_part="base";
-//render_part="assembly";
+render_part="assembly";
 render_part="plate";
 
 if(render_part=="plate") plate();
@@ -24,7 +24,7 @@ if(render_part=="assembly") assembly();
 module plate(){
     % translate([0,0,-1.0]) cube([28.0,64.0,2.0],center=true);
     translate([-9,21,0]) rotate([0,0,90+15]) idler();
-    translate([7,-2,0]) rotate(90) base();
+    translate([8,-2,0]) rotate(90) base();
 }
 
 module assembly(){
@@ -53,13 +53,12 @@ module idler(idler_h=10,filament_h=4.6) difference() {
 			circle(5);
 			translate([0, -18.5, 0]) circle(5);
 			rotate(180) translate([-5, 0, 0]) square([10, 18.5]);
-			rotate(104){
-				translate([1,0]) square([4, 25]);
-				translate([1,22.5])square([14.8,4]);
-			}
-			rotate(77)translate([0,27.2])square([4,18]);
-            rotate(77)translate([-0.5,0]) square([3,27.2]);
-			rotate(50) translate([-8, -2, 0]) square([5, 10]);
+            rotate(77)translate([0,27.2])square([4,18]);
+			rotate(104) translate([1,22.5])square([14.8,4]);
+			hull() {
+                rotate(104) translate([1,0]) square([4, 26]);
+                rotate(50) translate([-8, -2, 0]) square([5, 10]);
+            }
 		}
 		circle(3 * 7/12, $fn = 6);
 		rotate(9) translate([-15.5 + 10.56 / 2 + 4 + filament_d, -15.5, 0]) circle(2.5* 7/12, $fn = 6);
@@ -98,9 +97,9 @@ module base() difference() {
 	rotate([0,0,14])translate([-12, -10, 5]) linear_extrude(height = 15, convexity = 5)square(100);
 	rotate([0,0,-14])translate([-12, -10, 5]) linear_extrude(height = 15, convexity = 5)square(100);
 	translate([-15.5, 0, 15 - 4]) cylinder(r1 = 0, r2 = 8, h = 8, $fn = 6);
-	rotate(-5) translate([-39,0,5])cube([20,10,20]);
-	rotate(5) translate([-39,0,5])mirror([0,1,0]) cube([20,10,20]);
-	#rotate(-5) translate([-24, 1.0, 10]) rotate([90,0,0])cylinder(r = spring_d * 7/12,h=2.0, $fn = 6);
-	#rotate(5) translate([-24, -1.0, 10]) rotate([-90,0,0])cylinder(r = spring_d * 7/12,h=2.0, $fn = 6);
+	rotate(-5) translate([-19,0,5]) rotate(90) cube([20,7.5,20]);
+	rotate(5) translate([-19,0,5])mirror([0,1,0]) rotate(90) cube([20,7.5,20]);
+	#rotate(-5) translate([-24, 11.0, 10]) rotate([90,0,0])cylinder(r = spring_d * 7/12,h=12.0, $fn = 6);
+	#rotate(5) translate([-24, -11.0, 10]) rotate([-90,0,0])cylinder(r = spring_d * 7/12,h=12.0, $fn = 6);
     translate([-24,0,10]) rotate([90,0,0]) cylinder(d=3.2,h=10,$fn=6,center=true);
 }
