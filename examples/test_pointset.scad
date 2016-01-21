@@ -40,4 +40,4 @@ for(pt=pts_spiral) {
 }
 
 pts_random = [ for(xrand=rands(0,cube_size,3),yrand=rands(0,cube_size,3,xrand),zcoord=[0,cube_size/4]) [ xrand, yrand, zcoord ] ];
-translate([0,-cube_size,0]) pointset(points=pts_random,angle=45/4,radius=cube_size,distance=cube_size, neighbors=16, scale_num_points=4, edge_sensitivity=0.1,convexity=5);
+//translate([0,-cube_size,0]) pointset(points=pts_random,angle=45/4,radius=cube_size,distance=cube_size, neighbors=16, scale_num_points=4, edge_sensitivity=0.1,convexity=5);
