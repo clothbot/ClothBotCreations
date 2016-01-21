@@ -1,5 +1,7 @@
 // Animation Test; variables file.
 
+define_variables_scad=true;
+
 dt=1.0;
 
 mv_x=2.0;

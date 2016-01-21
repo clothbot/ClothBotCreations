@@ -58,7 +58,7 @@ module picture_frame(size_name
         ,pillar_d=min_unsup_wire_th,pillar_spacing=min_esc_hole_single_d
         ,pillar_h=min_esc_hole_multi_d
     ) {
-    picture_size=picture_sizes[search([size_name],picture_sizes,1,0)[0]];
+    picture_size=get_picture_size(size_name,picture_sizes);
     echo(str("  picture_size = ",picture_size));
     size_mm2=picture_size[1];
     echo(str("  size_mm2 = ",size_mm2));

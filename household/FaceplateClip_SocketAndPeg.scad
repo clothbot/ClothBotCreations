@@ -4,8 +4,8 @@ $fs=0.1;
 $fa=15;
 
  render_part=1; // Faceplate_Clip_Peg()
-//render_part=2; // Faceplate_Clip_Socket()
-//render_part=3; // Faceplate_Clip_Peg and Faceplate_Clip_Socket
+render_part=2; // Faceplate_Clip_Socket()
+render_part=3; // Faceplate_Clip_Peg and Faceplate_Clip_Socket
 
 module Faceplate_Clip_Peg_Body(extension=0.1
 	, base_width=12.0
@@ -108,21 +108,21 @@ module Faceplate_Clip_Socket_Holes(extension=0.1
 	, base_slot_length=11.0
 	, base_slot_y_offset=10.0/5
 	) {
-  translate([0,peg_width/2,0]) union() {
+  translate([0,peg_width/2,0]) hull() {
     translate([base_slot_separation/2+base_slot_width/2,-base_slot_width/2,-extension])
       cube(size=[base_slot_length-base_slot_width,base_slot_width,2*extension+base_height],center=false);
     translate([base_slot_separation/2+base_slot_width/2,0,-extension])
-      cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false);
+      rotate(30) cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false,$fn=6);
     translate([base_slot_separation/2+base_slot_length-base_slot_width/2,0,-extension])
-      cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false);
+      rotate(30)cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false,$fn=6);
   }
-  translate([0,peg_width/2,0]) union() {
+  translate([0,peg_width/2,0]) hull() {
     translate([-base_slot_separation/2-base_slot_length+base_slot_width/2,-base_slot_width/2,-extension])
       cube(size=[base_slot_length-base_slot_width,base_slot_width,2*extension+base_height],center=false);
     translate([-base_slot_separation/2-base_slot_length+base_slot_width/2,0,-extension])
-      cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false);
+      rotate(30) cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false,$fn=6);
     translate([-base_slot_separation/2-base_slot_width/2,0,-extension])
-      cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false);
+      rotate(30) cylinder(r=base_slot_width/2,h=2*extension+base_height,center=false,$fn=6);
   }
   translate([0,0,-extension]) cylinder(r=base_slot_width/2,h=2*extension+base_height+peg_height,center=false);
 }
@@ -138,12 +138,13 @@ module Faceplate_Clip_Socket(extension=0.1
 
 if(render_part==2) {
   echo("Rendering Faceplate_Clip_Socket()...");
-  Faceplate_Clip_Socket();
+  rotate([90,0,90]) Faceplate_Clip_Socket();
 }
 
 if(render_part==3) {
   echo("Rendering Faceplate_Clip_Peg() and Faceplate_Clip_Socket()...");
-  rotate([90,0,180]) Faceplate_Clip_Socket();
-  translate([0,-10.0,0]) Faceplate_Clip_Peg();
+    %translate([0,0,-1.0]) cube([32,100,2],center=true);
+  translate([-2.5,0,0]) rotate([90,0,90]) Faceplate_Clip_Socket();
+  translate([-9.5,0.0,0]) rotate([0,0,90]) Faceplate_Clip_Peg();
 }
 
