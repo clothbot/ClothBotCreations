@@ -3,6 +3,7 @@
 render_test="test bulge_cube";
 //render_test="test bulge_cone";
 render_test="test text projection";
+render_test="test grid projection";
 
 module bulge_cube(h,scale_xy=0.1,theta=0,phi=0,dr=0) {
     intersection() {
@@ -46,7 +47,7 @@ if(render_test=="test bulge_cone") {
 
 module bulge_cube_mask(h,scale_xy=0.1,theta=0,phi=0,dr=0) {
     difference() {
-        bulge_cube(h=h,scale_xy=scale_xy,theta=theta,phi=phi,dr=dr) children();
+        union() bulge_cube(h=h,scale_xy=scale_xy,theta=theta,phi=phi,dr=dr) children();
         children();
     }
 }
@@ -59,3 +60,22 @@ if(render_test=="test text projection") {
     }
 }
 
+module build_grid(dx,dy,dz,nx,ny) {
+    for(xi=[0:nx-1]) {
+        translate([2*dx*xi,0,-dx/2-dz/2]) rotate([-90,0,0]) cylinder(r=dx/2,h=2*dy*(ny-1),center=false,$fn=8);
+    }
+    for(yj=[0:ny-1]) {
+        translate([0,2*dy*yj,dy/2+dz/2]) rotate([0,90,0]) cylinder(h=2*dx*(nx-1),r=dy/2,center=false,$fn=8);
+    }
+}
+
+if(render_test=="test grid projection") {
+    union() {
+        render() intersection() {
+            union() translate([0.0,0.0,0]) rotate([0,0,0]) linear_extrude(height=10,center=true) resize([10,0,0],auto=true) text("OpenSCAD",valign="bottom",halign="left");
+            union() bulge_cube_mask(h=0.05,scale_xy=0.05,theta=0,phi=0,dr=0.05)
+                union() build_grid(0.25,0.25,0.1,21,5);
+        }
+        # build_grid(0.25,0.25,0.1,21,5);
+    }
+}
