@@ -73,7 +73,7 @@ if(render_test=="test grid projection") {
     union() {
         render() intersection() {
             union() translate([0.0,0.0,0]) rotate([0,0,0]) linear_extrude(height=10,center=true) resize([10,0,0],auto=true) text("OpenSCAD",valign="bottom",halign="left");
-            union() bulge_cube_mask(h=0.05,scale_xy=0.05,theta=0,phi=0,dr=0.05)
+            union() bulge_cube_mask(h=0.05,scale_xy=0.01,theta=0,phi=0,dr=0.02)
                 union() build_grid(0.25,0.25,0.1,21,5);
         }
         # build_grid(0.25,0.25,0.1,21,5);
