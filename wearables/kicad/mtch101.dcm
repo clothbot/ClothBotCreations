@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP MTCH101
+D Single-Channel Proximity Detector, SOT-23-6
+K Microchip Touch Sensor Key Proximity Detector LED
+F http://www.microchip.com/wwwproducts/en/MTCH101
+$ENDCMP
+#
+#End Doc Library

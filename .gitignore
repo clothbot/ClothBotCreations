@@ -1,3 +1,4 @@
 *.gcode
 *.stl
 
+*.bak

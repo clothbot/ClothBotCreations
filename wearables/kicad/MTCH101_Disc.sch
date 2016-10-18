@@ -1,0 +1,362 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:mtch101
+LIBS:MTCH101_Disc-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MTCH101 U1
+U 1 1 58063928
+P 5300 3900
+F 0 "U1" H 5200 4225 50  0000 R CNN
+F 1 "MTCH101" H 5200 4150 50  0000 R CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23-6" H 5350 3650 50  0001 L CNN
+F 3 "" H 5570 4450 50  0000 C CNN
+	1    5300 3900
+	-1   0    0    -1  
+$EndComp
+$Comp
+L VDD #vdd01
+U 1 1 58064C9E
+P 7000 2550
+F 0 "#vdd01" H 7000 2400 50  0001 C CNN
+F 1 "VDD" H 7000 2700 50  0000 C CNN
+F 2 "" H 7000 2550 50  0000 C CNN
+F 3 "" H 7000 2550 50  0000 C CNN
+	1    7000 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #gnd02
+U 1 1 58064CAC
+P 7000 3400
+F 0 "#gnd02" H 7000 3150 50  0001 C CNN
+F 1 "GND" H 7000 3250 50  0000 C CNN
+F 2 "" H 7000 3400 50  0000 C CNN
+F 3 "" H 7000 3400 50  0000 C CNN
+	1    7000 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C1
+U 1 1 58064CC6
+P 7000 3000
+F 0 "C1" H 7025 3100 50  0000 L CNN
+F 1 "0.1u" H 7025 2900 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603" H 7050 2800 50  0000 C CNN
+F 3 "" H 7000 3000 50  0000 C CNN
+	1    7000 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 3450 5300 3600
+Wire Wire Line
+	5300 4200 5300 4350
+Wire Wire Line
+	7000 3150 7000 3400
+Wire Wire Line
+	7000 2550 7000 2850
+$Comp
+L R R4
+U 1 1 58064DD0
+P 4650 2800
+F 0 "R4" V 4730 2800 50  0000 C CNN
+F 1 "10k" V 4650 2800 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603" V 4580 2800 50  0000 L CNN
+F 3 "" H 4650 2800 50  0000 C CNN
+	1    4650 2800
+	0    1    1    0   
+$EndComp
+$Comp
+L R R5
+U 1 1 58064FBC
+P 5900 3550
+F 0 "R5" V 5980 3550 50  0000 C CNN
+F 1 "10k" V 5900 3550 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603" V 5830 3550 50  0000 R CNN
+F 3 "" H 5900 3550 50  0000 C CNN
+	1    5900 3550
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5700 3800 6100 3800
+$Comp
+L R R1
+U 1 1 580650CE
+P 3500 2550
+F 0 "R1" V 3580 2550 50  0000 C CNN
+F 1 "100k" V 3500 2550 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" H 3430 2550 50  0000 R CNN
+F 3 "" H 3500 2550 50  0000 C CNN
+	1    3500 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R2
+U 1 1 580650FF
+P 3500 3050
+F 0 "R2" V 3580 3050 50  0000 C CNN
+F 1 "OPEN" V 3500 3050 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" H 3430 3050 50  0000 R CNN
+F 3 "" H 3500 3050 50  0000 C CNN
+	1    3500 3050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3500 2700 3500 2900
+Wire Wire Line
+	3500 2800 4500 2800
+Connection ~ 3500 2800
+Wire Wire Line
+	3500 2300 3500 2400
+Wire Wire Line
+	3500 3200 3500 3300
+$Comp
+L R R3
+U 1 1 5806521A
+P 4450 4000
+F 0 "R3" V 4530 4000 50  0000 C CNN
+F 1 "4.7k" V 4450 4000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603" V 4380 4000 50  0000 C BNN
+F 3 "" H 4450 4000 50  0000 C CNN
+	1    4450 4000
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4800 2800 4800 3800
+Wire Wire Line
+	4800 3800 4900 3800
+Wire Wire Line
+	4900 4000 4600 4000
+Wire Wire Line
+	4300 4000 3700 4000
+$Comp
+L TEST_1P W1
+U 1 1 580654F7
+P 3700 4000
+F 0 "W1" H 3700 4270 50  0000 C CNN
+F 1 "TEST_MTI" H 3700 4200 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 3900 4000 50  0001 C CNN
+F 3 "" H 3900 4000 50  0000 C CNN
+	1    3700 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W3
+U 1 1 58065576
+P 4400 2700
+F 0 "W3" H 4400 2970 50  0000 C CNN
+F 1 "TEST_MTSA" H 4400 2900 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 4600 2700 50  0001 C CNN
+F 3 "" H 4600 2700 50  0000 C CNN
+	1    4400 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R6
+U 1 1 58065673
+P 6400 3750
+F 0 "R6" V 6480 3750 50  0000 C CNN
+F 1 "1k" V 6400 3750 50  0000 C CNN
+F 2 "Resistors_SMD:R_0603" V 6330 3750 50  0000 R CNN
+F 3 "" H 6400 3750 50  0000 C CNN
+	1    6400 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D1
+U 1 1 5806579A
+P 6400 3300
+F 0 "D1" H 6400 3400 50  0000 C CNN
+F 1 "LED" H 6400 3200 50  0000 C CNN
+F 2 "LEDs:LED_0603" H 6400 3300 50  0000 C TNN
+F 3 "" H 6400 3300 50  0000 C CNN
+	1    6400 3300
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6400 4000 6400 3900
+Wire Wire Line
+	6400 3500 6400 3600
+Wire Wire Line
+	6400 2900 6400 3100
+$Comp
+L TEST_1P W4
+U 1 1 58065ACD
+P 6500 4000
+F 0 "W4" H 6500 4270 50  0000 C CNN
+F 1 "TEST_MTO" H 6500 4200 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 6700 4000 50  0001 C CNN
+F 3 "" H 6700 4000 50  0000 C CNN
+	1    6500 4000
+	0    1    1    0   
+$EndComp
+Text Label 5800 4000 0    60   ~ 0
+out
+Text Label 6000 3800 0    60   ~ 0
+pm
+Text Label 4800 3250 0    60   ~ 0
+MTSA
+Text Label 4650 4000 0    60   ~ 0
+MTI
+Wire Wire Line
+	5700 4000 6500 4000
+Connection ~ 6400 4000
+Text Label 3900 4000 0    60   ~ 0
+sns
+Text Label 3950 2800 0    60   ~ 0
+ref
+$Comp
+L TEST_1P W6
+U 1 1 580662C8
+P 6100 3800
+F 0 "W6" H 6100 4070 50  0000 C CNN
+F 1 "TEST_MTPM" H 6100 4000 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 6300 3800 50  0001 C CNN
+F 3 "" H 6300 3800 50  0000 C CNN
+	1    6100 3800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5900 3200 5900 3400
+Wire Wire Line
+	5900 3700 5900 3800
+Connection ~ 5900 3800
+Wire Wire Line
+	4400 2700 4400 2800
+Connection ~ 4400 2800
+$Comp
+L VDD #vdd03
+U 1 1 58067C71
+P 6400 2900
+F 0 "#vdd03" H 6400 2750 50  0001 C CNN
+F 1 "VDD" H 6400 3050 50  0000 C CNN
+F 2 "" H 6400 2900 50  0000 C CNN
+F 3 "" H 6400 2900 50  0000 C CNN
+	1    6400 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L VDD #vdd04
+U 1 1 580681E5
+P 5900 3200
+F 0 "#vdd04" H 5900 3050 50  0001 C CNN
+F 1 "VDD" H 5900 3350 50  0000 C CNN
+F 2 "" H 5900 3200 50  0000 C CNN
+F 3 "" H 5900 3200 50  0000 C CNN
+	1    5900 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L VDD #vdd05
+U 1 1 58068217
+P 5300 3450
+F 0 "#vdd05" H 5300 3300 50  0001 C CNN
+F 1 "VDD" H 5300 3600 50  0000 C CNN
+F 2 "" H 5300 3450 50  0000 C CNN
+F 3 "" H 5300 3450 50  0000 C CNN
+	1    5300 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L VDD #vdd06
+U 1 1 58068249
+P 3500 2300
+F 0 "#vdd06" H 3500 2150 50  0001 C CNN
+F 1 "VDD" H 3500 2450 50  0000 C CNN
+F 2 "" H 3500 2300 50  0000 C CNN
+F 3 "" H 3500 2300 50  0000 C CNN
+	1    3500 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #gnd07
+U 1 1 580686BF
+P 5300 4350
+F 0 "#gnd07" H 5300 4100 50  0001 C CNN
+F 1 "GND" H 5300 4200 50  0000 C CNN
+F 2 "" H 5300 4350 50  0000 C CNN
+F 3 "" H 5300 4350 50  0000 C CNN
+	1    5300 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #gnd08
+U 1 1 580686F1
+P 3500 3300
+F 0 "#gnd08" H 3500 3050 50  0001 C CNN
+F 1 "GND" H 3500 3150 50  0000 C CNN
+F 2 "" H 3500 3300 50  0000 C CNN
+F 3 "" H 3500 3300 50  0000 C CNN
+	1    3500 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG09
+U 1 1 58068928
+P 7150 2800
+F 0 "#FLG09" H 7150 2895 50  0001 C CNN
+F 1 "PWR_FLAG" H 7150 2980 50  0000 C CNN
+F 2 "" H 7150 2800 50  0000 C CNN
+F 3 "" H 7150 2800 50  0000 C CNN
+	1    7150 2800
+	0    1    1    0   
+$EndComp
+$Comp
+L PWR_FLAG #FLG010
+U 1 1 58068956
+P 7150 3300
+F 0 "#FLG010" H 7150 3395 50  0001 C CNN
+F 1 "PWR_FLAG" H 7150 3480 50  0000 C CNN
+F 2 "" H 7150 3300 50  0000 C CNN
+F 3 "" H 7150 3300 50  0000 C CNN
+	1    7150 3300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7150 2800 7000 2800
+Connection ~ 7000 2800
+Wire Wire Line
+	7150 3300 7000 3300
+Connection ~ 7000 3300
+$EndSCHEMATC
