@@ -61,7 +61,7 @@ U 1 1 58064C9E
 P 7000 2550
 F 0 "#vdd01" H 7000 2400 50  0001 C CNN
 F 1 "VDD" H 7000 2700 50  0000 C CNN
-F 2 "" H 7000 2550 50  0000 C CNN
+F 2 "" H 7000 2550 25  0000 C CNN
 F 3 "" H 7000 2550 50  0000 C CNN
 	1    7000 2550
 	1    0    0    -1  
@@ -69,12 +69,12 @@ $EndComp
 $Comp
 L GND #gnd02
 U 1 1 58064CAC
-P 7000 3400
-F 0 "#gnd02" H 7000 3150 50  0001 C CNN
-F 1 "GND" H 7000 3250 50  0000 C CNN
-F 2 "" H 7000 3400 50  0000 C CNN
-F 3 "" H 7000 3400 50  0000 C CNN
-	1    7000 3400
+P 7000 3500
+F 0 "#gnd02" H 7000 3250 50  0001 C CNN
+F 1 "GND" H 7000 3350 50  0000 C CNN
+F 2 "" H 7000 3500 25  0000 C CNN
+F 3 "" H 7000 3500 50  0000 C CNN
+	1    7000 3500
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -88,14 +88,6 @@ F 3 "" H 7000 3000 50  0000 C CNN
 	1    7000 3000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5300 3450 5300 3600
-Wire Wire Line
-	5300 4200 5300 4350
-Wire Wire Line
-	7000 3150 7000 3400
-Wire Wire Line
-	7000 2550 7000 2850
 $Comp
 L R R4
 U 1 1 58064DD0
@@ -118,8 +110,6 @@ F 3 "" H 5900 3550 50  0000 C CNN
 	1    5900 3550
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	5700 3800 6100 3800
 $Comp
 L R R1
 U 1 1 580650CE
@@ -142,15 +132,6 @@ F 3 "" H 3500 3050 50  0000 C CNN
 	1    3500 3050
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3500 2700 3500 2900
-Wire Wire Line
-	3500 2800 4500 2800
-Connection ~ 3500 2800
-Wire Wire Line
-	3500 2300 3500 2400
-Wire Wire Line
-	3500 3200 3500 3300
 $Comp
 L R R3
 U 1 1 5806521A
@@ -162,21 +143,13 @@ F 3 "" H 4450 4000 50  0000 C CNN
 	1    4450 4000
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	4800 2800 4800 3800
-Wire Wire Line
-	4800 3800 4900 3800
-Wire Wire Line
-	4900 4000 4600 4000
-Wire Wire Line
-	4300 4000 3700 4000
 $Comp
 L TEST_1P W1
 U 1 1 580654F7
 P 3700 4000
 F 0 "W1" H 3700 4270 50  0000 C CNN
 F 1 "TEST_MTI" H 3700 4200 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 3900 4000 50  0001 C CNN
+F 2 "" H 3900 4000 50  0001 C CNN
 F 3 "" H 3900 4000 50  0000 C CNN
 	1    3700 4000
 	1    0    0    -1  
@@ -187,7 +160,7 @@ U 1 1 58065576
 P 4400 2700
 F 0 "W3" H 4400 2970 50  0000 C CNN
 F 1 "TEST_MTSA" H 4400 2900 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 4600 2700 50  0001 C CNN
+F 2 "Mounting_Holes:MountingHole_2.2mm_M2_Pad" H 4600 2700 50  0001 C CNN
 F 3 "" H 4600 2700 50  0000 C CNN
 	1    4400 2700
 	1    0    0    -1  
@@ -209,24 +182,18 @@ U 1 1 5806579A
 P 6400 3300
 F 0 "D1" H 6400 3400 50  0000 C CNN
 F 1 "LED" H 6400 3200 50  0000 C CNN
-F 2 "LEDs:LED_0603" H 6400 3300 50  0000 C TNN
+F 2 "LEDs:LED_1206" H 6400 3300 50  0000 C TNN
 F 3 "" H 6400 3300 50  0000 C CNN
 	1    6400 3300
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	6400 4000 6400 3900
-Wire Wire Line
-	6400 3500 6400 3600
-Wire Wire Line
-	6400 2900 6400 3100
 $Comp
 L TEST_1P W4
 U 1 1 58065ACD
 P 6500 4000
 F 0 "W4" H 6500 4270 50  0000 C CNN
 F 1 "TEST_MTO" H 6500 4200 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 6700 4000 50  0001 C CNN
+F 2 "Mounting_Holes:MountingHole_2.2mm_M2_Pad" H 6700 4000 50  0001 C CNN
 F 3 "" H 6700 4000 50  0000 C CNN
 	1    6500 4000
 	0    1    1    0   
@@ -239,9 +206,6 @@ Text Label 4800 3250 0    60   ~ 0
 MTSA
 Text Label 4650 4000 0    60   ~ 0
 MTI
-Wire Wire Line
-	5700 4000 6500 4000
-Connection ~ 6400 4000
 Text Label 3900 4000 0    60   ~ 0
 sns
 Text Label 3950 2800 0    60   ~ 0
@@ -257,14 +221,6 @@ F 3 "" H 6300 3800 50  0000 C CNN
 	1    6100 3800
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	5900 3200 5900 3400
-Wire Wire Line
-	5900 3700 5900 3800
-Connection ~ 5900 3800
-Wire Wire Line
-	4400 2700 4400 2800
-Connection ~ 4400 2800
 $Comp
 L VDD #vdd03
 U 1 1 58067C71
@@ -353,10 +309,109 @@ F 3 "" H 7150 3300 50  0000 C CNN
 	1    7150 3300
 	0    1    1    0   
 $EndComp
+$Comp
+L CONN_02X02 P1
+U 1 1 580797CC
+P 3150 4050
+F 0 "P1" H 3150 4200 50  0000 C CNN
+F 1 "SNS" H 3150 3900 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x02" H 3150 2850 50  0000 C CNN
+F 3 "" H 3150 2850 50  0000 C CNN
+	1    3150 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 3450 5300 3600
+Wire Wire Line
+	5300 4200 5300 4350
+Wire Wire Line
+	7000 3150 7000 3500
+Wire Wire Line
+	7000 2550 7000 2850
+Wire Wire Line
+	5700 3800 6100 3800
+Wire Wire Line
+	3500 2700 3500 2900
+Wire Wire Line
+	3500 2800 4500 2800
+Connection ~ 3500 2800
+Wire Wire Line
+	3500 2300 3500 2400
+Wire Wire Line
+	3500 3200 3500 3300
+Wire Wire Line
+	4800 2800 4800 3800
+Wire Wire Line
+	4800 3800 4900 3800
+Wire Wire Line
+	4900 4000 4600 4000
+Wire Wire Line
+	3400 4000 4300 4000
+Wire Wire Line
+	6400 4000 6400 3900
+Wire Wire Line
+	6400 3500 6400 3600
+Wire Wire Line
+	6400 2900 6400 3100
+Wire Wire Line
+	5700 4000 6500 4000
+Connection ~ 6400 4000
+Wire Wire Line
+	5900 3200 5900 3400
+Wire Wire Line
+	5900 3700 5900 3800
+Connection ~ 5900 3800
+Wire Wire Line
+	4400 2700 4400 2800
+Connection ~ 4400 2800
 Wire Wire Line
 	7150 2800 7000 2800
 Connection ~ 7000 2800
 Wire Wire Line
 	7150 3300 7000 3300
 Connection ~ 7000 3300
+Connection ~ 3700 4000
+Wire Wire Line
+	3450 4000 3450 4250
+Wire Wire Line
+	3450 4100 3400 4100
+Connection ~ 3450 4000
+Wire Wire Line
+	3450 4250 2800 4250
+Wire Wire Line
+	2800 4250 2800 4000
+Wire Wire Line
+	2800 4000 2900 4000
+Connection ~ 3450 4100
+Wire Wire Line
+	2800 4100 2900 4100
+Connection ~ 2800 4100
+$Comp
+L TEST_1P W5
+U 1 1 5807E2FD
+P 6900 2600
+F 0 "W5" H 6900 2870 50  0000 C CNN
+F 1 "TEST_VDD" H 6900 2800 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Round-TH_Big" H 7100 2600 50  0001 C CNN
+F 3 "" H 7100 2600 50  0000 C CNN
+	1    6900 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L TEST_1P W2
+U 1 1 5807E47E
+P 6900 3400
+F 0 "W2" H 6900 3670 50  0000 C CNN
+F 1 "TEST_GND" H 6900 3600 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Round-TH_Big" H 7100 3400 50  0001 C CNN
+F 3 "" H 7100 3400 50  0000 C CNN
+	1    6900 3400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6900 2600 7000 2600
+Connection ~ 7000 2600
+Wire Wire Line
+	6900 3400 7000 3400
+Connection ~ 7000 3400
 $EndSCHEMATC
