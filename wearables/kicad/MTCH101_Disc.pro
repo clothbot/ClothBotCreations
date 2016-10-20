@@ -1,4 +1,4 @@
-update=2016-10-18 10:55:18
+update=2016-10-20 09:53:04
 version=1
 last_client=kicad
 [pcbnew]
@@ -59,3 +59,4 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=mtch101
+LibName31=buttons

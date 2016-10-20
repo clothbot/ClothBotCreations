@@ -29,6 +29,7 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:mtch101
+LIBS:buttons
 LIBS:MTCH101_Disc-cache
 EELAYER 25 0
 EELAYER END
@@ -126,7 +127,7 @@ L R R2
 U 1 1 580650FF
 P 3500 3050
 F 0 "R2" V 3580 3050 50  0000 C CNN
-F 1 "OPEN" V 3500 3050 50  0000 C CNN
+F 1 "100k" V 3500 3050 50  0000 C CNN
 F 2 "Resistors_SMD:R_0603_HandSoldering" H 3430 3050 50  0000 R CNN
 F 3 "" H 3500 3050 50  0000 C CNN
 	1    3500 3050
@@ -142,17 +143,6 @@ F 2 "Resistors_SMD:R_0603" V 4380 4000 50  0000 C BNN
 F 3 "" H 4450 4000 50  0000 C CNN
 	1    4450 4000
 	0    1    1    0   
-$EndComp
-$Comp
-L TEST_1P W1
-U 1 1 580654F7
-P 3700 4000
-F 0 "W1" H 3700 4270 50  0000 C CNN
-F 1 "TEST_MTI" H 3700 4200 50  0000 C CNN
-F 2 "" H 3900 4000 50  0001 C CNN
-F 3 "" H 3900 4000 50  0000 C CNN
-	1    3700 4000
-	1    0    0    -1  
 $EndComp
 $Comp
 L TEST_1P W3
@@ -309,17 +299,6 @@ F 3 "" H 7150 3300 50  0000 C CNN
 	1    7150 3300
 	0    1    1    0   
 $EndComp
-$Comp
-L CONN_02X02 P1
-U 1 1 580797CC
-P 3150 4050
-F 0 "P1" H 3150 4200 50  0000 C CNN
-F 1 "SNS" H 3150 3900 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x02" H 3150 2850 50  0000 C CNN
-F 3 "" H 3150 2850 50  0000 C CNN
-	1    3150 4050
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5300 3450 5300 3600
 Wire Wire Line
@@ -346,8 +325,6 @@ Wire Wire Line
 Wire Wire Line
 	4900 4000 4600 4000
 Wire Wire Line
-	3400 4000 4300 4000
-Wire Wire Line
 	6400 4000 6400 3900
 Wire Wire Line
 	6400 3500 6400 3600
@@ -370,22 +347,6 @@ Connection ~ 7000 2800
 Wire Wire Line
 	7150 3300 7000 3300
 Connection ~ 7000 3300
-Connection ~ 3700 4000
-Wire Wire Line
-	3450 4000 3450 4250
-Wire Wire Line
-	3450 4100 3400 4100
-Connection ~ 3450 4000
-Wire Wire Line
-	3450 4250 2800 4250
-Wire Wire Line
-	2800 4250 2800 4000
-Wire Wire Line
-	2800 4000 2900 4000
-Connection ~ 3450 4100
-Wire Wire Line
-	2800 4100 2900 4100
-Connection ~ 2800 4100
 $Comp
 L TEST_1P W5
 U 1 1 5807E2FD
@@ -414,4 +375,17 @@ Connection ~ 7000 2600
 Wire Wire Line
 	6900 3400 7000 3400
 Connection ~ 7000 3400
+$Comp
+L SEW_2X2 W1
+U 1 1 5808D751
+P 3700 4000
+F 0 "W1" H 3700 4270 50  0000 C CNN
+F 1 "sns" H 3700 4200 50  0000 C CNN
+F 2 "buttons:sew_2x2" H 3900 4000 50  0000 C CNN
+F 3 "" H 3900 4000 50  0000 C CNN
+	1    3700 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 4000 4300 4000
 $EndSCHEMATC
