@@ -134,17 +134,6 @@ F 3 "" H 3450 5200 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L TEST_1P W3
-U 1 1 58065576
-P 2900 5400
-F 0 "W3" H 2900 5670 50  0000 C CNN
-F 1 "TEST_MTSA" H 2900 5600 50  0000 C CNN
-F 2 "Mounting_Holes:MountingHole_2.2mm_M2_Pad" H 3100 5400 50  0001 C CNN
-F 3 "" H 3100 5400 50  0000 C CNN
-	1    2900 5400
-	1    0    0    -1  
-$EndComp
-$Comp
 L R R6
 U 1 1 58065673
 P 5400 5350
@@ -165,17 +154,6 @@ F 2 "LEDs:LED_1206" H 5400 4900 50  0000 C TNN
 F 3 "" H 5400 4900 50  0000 C CNN
 	1    5400 4900
 	0    -1   -1   0   
-$EndComp
-$Comp
-L TEST_1P W4
-U 1 1 58065ACD
-P 5500 5600
-F 0 "W4" H 5500 5870 50  0000 C CNN
-F 1 "TEST_MTO" H 5500 5800 50  0000 C CNN
-F 2 "Mounting_Holes:MountingHole_2.2mm_M2_Pad" H 5700 5600 50  0001 C CNN
-F 3 "" H 5700 5600 50  0000 C CNN
-	1    5500 5600
-	0    1    1    0   
 $EndComp
 Text Label 4950 5600 0    60   ~ 0
 out
@@ -326,28 +304,6 @@ Connection ~ 7000 2800
 Wire Wire Line
 	7150 3300 7000 3300
 Connection ~ 7000 3300
-$Comp
-L TEST_1P W5
-U 1 1 5807E2FD
-P 6900 2600
-F 0 "W5" H 6900 2870 50  0000 C CNN
-F 1 "TEST_VDD" H 6900 2800 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Round-TH_Big" H 7100 2600 50  0001 C CNN
-F 3 "" H 7100 2600 50  0000 C CNN
-	1    6900 2600
-	0    -1   -1   0   
-$EndComp
-$Comp
-L TEST_1P W2
-U 1 1 5807E47E
-P 6900 3400
-F 0 "W2" H 6900 3670 50  0000 C CNN
-F 1 "TEST_GND" H 6900 3600 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Round-TH_Big" H 7100 3400 50  0001 C CNN
-F 3 "" H 7100 3400 50  0000 C CNN
-	1    6900 3400
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	6900 2600 7000 2600
 Connection ~ 7000 2600
@@ -385,4 +341,48 @@ Wire Wire Line
 	3600 5600 3900 5600
 Wire Wire Line
 	2900 5400 2900 5600
+$Comp
+L SEW_1X2 W3
+U 1 1 580A30E6
+P 2900 5400
+F 0 "W3" H 2900 5670 50  0000 C CNN
+F 1 "sa" H 2900 5600 50  0000 C CNN
+F 2 "buttons:sew_1x2" H 3100 5400 50  0000 C CNN
+F 3 "" H 3100 5400 50  0000 C CNN
+	1    2900 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L SEW_1X2 W4
+U 1 1 580A3684
+P 5500 5600
+F 0 "W4" H 5500 5870 50  0000 C CNN
+F 1 "out" H 5500 5800 50  0000 C CNN
+F 2 "buttons:sew_1x2" H 5700 5600 50  0000 C CNN
+F 3 "" H 5700 5600 50  0000 C CNN
+	1    5500 5600
+	0    1    1    0   
+$EndComp
+$Comp
+L SEW_1X2 W5
+U 1 1 580A4007
+P 6900 2600
+F 0 "W5" H 6900 2870 50  0000 C CNN
+F 1 "vdd" H 6900 2800 50  0000 C CNN
+F 2 "buttons:sew_1x2" H 7100 2600 50  0000 C CNN
+F 3 "" H 7100 2600 50  0000 C CNN
+	1    6900 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L SEW_1X2 W2
+U 1 1 580A4052
+P 6900 3400
+F 0 "W2" H 6900 3670 50  0000 C CNN
+F 1 "gnd" H 6900 3600 50  0000 C CNN
+F 2 "buttons:sew_1x2" H 7100 3400 50  0000 C CNN
+F 3 "" H 7100 3400 50  0000 C CNN
+	1    6900 3400
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC
